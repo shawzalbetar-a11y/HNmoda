@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -31,7 +32,8 @@ export function Header() {
     <header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between h-20 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="text-2xl font-bold font-display">HN</span>
+          {/* To use your logo, place it in `public/logo.svg` and update the src if needed. */}
+          <Image src="/logo.svg" alt="HUMAN NATURE Logo" width={48} height={48} />
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">
