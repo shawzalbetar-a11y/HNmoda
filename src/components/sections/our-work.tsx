@@ -100,13 +100,11 @@ export function OurWork() {
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {filteredWork.map(work => (
-                        <Card key={work.id} className="group overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
+                        <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
                             <CardContent className="p-0">
                                 <div className="relative aspect-[3/4]">
                                     <Image src={work.src} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
-                                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <PlayCircle className="h-12 w-12 text-white" />
-                                    </div>
+                                    <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
                                 </div>
                             </CardContent>
                         </Card>
