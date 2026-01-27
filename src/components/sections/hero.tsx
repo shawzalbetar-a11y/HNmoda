@@ -1,17 +1,18 @@
 'use client';
 import Image from 'next/image';
+import placeholderImages from '@/lib/placeholder-images.json';
 
 export function Hero() {
-  const heroImageUrl = "https://picsum.photos/seed/herobackground/1200/800";
+  const { heroBackground } = placeholderImages;
 
   return (
     <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center">
       <Image
-        src={heroImageUrl}
+        src={heroBackground.url}
         alt="Fashion design workspace with fabrics and tools"
         fill
         className="object-cover"
-        data-ai-hint="fashion design workspace"
+        data-ai-hint={heroBackground.hint}
         priority
       />
       {/* Centered Text Overlay */}
