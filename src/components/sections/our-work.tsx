@@ -99,7 +99,7 @@ export function OurWork() {
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {filteredWork.map(work => (
-                        <Card key={work.id} className="overflow-hidden cursor-pointer" onClick={() => setSelectedWork(work)}>
+                        <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
                             <CardContent className="p-0">
                                 <div className="relative aspect-[3/4]">
                                     <Image src={work.src} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
@@ -137,12 +137,12 @@ export function OurWork() {
             )}
             
             <Dialog open={isOrderModalOpen} onOpenChange={setIsOrderModalOpen}>
-                <DialogContent>
+                <DialogContent className="overflow-y-auto max-h-[90vh]">
                     <DialogHeader>
                         <DialogTitle>{t.orderForm.title}</DialogTitle>
                         <DialogDescription>{t.orderForm.description}</DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4 overflow-y-auto max-h-[60vh]">
+                    <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">{t.orderForm.name}</Label>
                             <Input id="name" value={formState.name} onChange={e => setFormState({...formState, name: e.target.value})} className="col-span-3" />

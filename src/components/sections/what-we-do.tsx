@@ -50,7 +50,7 @@ export function WhatWeDo() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {services.map((service, index) => (
-                        <Card key={index} className="flex flex-col">
+                        <Card key={index} className="flex flex-col transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
                             <CardHeader>
                                 <div className="flex items-center gap-4">
                                     {service.icon}
