@@ -1,3 +1,46 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "product-1",
+      "description": "Elegant summer dress",
+      "imageUrl": "https://images.unsplash.com/photo-1495385794356-15371f348c31?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d29tYW4lMjBkcmVzc3xlbnwwfHx8fDE3Njk0OTMwMTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman dress"
+    },
+    {
+      "id": "product-2",
+      "description": "Men's winter coat",
+      "imageUrl": "https://images.unsplash.com/photo-1545036584-21fadd2efd25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtYW4lMjBjb2F0fGVufDB8fHx8MTc2OTQ5MzAxM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man coat"
+    },
+    {
+      "id": "product-3",
+      "description": "Stylish autumn jacket",
+      "imageUrl": "https://images.unsplash.com/photo-1617032869698-583c00770254?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmYXNoaW9uJTIwamFja2V0fGVufDB8fHx8MTc2OTQ5MzAxM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fashion jacket"
+    },
+    {
+      "id": "product-4",
+      "description": "Casual spring t-shirt",
+      "imageUrl": "https://images.unsplash.com/photo-1635650804494-41f0ecefec22?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtYW4lMjBzaGlydHxlbnwwfHx8fDE3Njk0OTMwMTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man shirt"
+    },
+    {
+      "id": "product-5",
+      "description": "Formal evening gown",
+      "imageUrl": "https://images.unsplash.com/photo-1710023141893-5ccbe1c4ae6d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3b21hbiUyMGdvd258ZW58MHx8fHwxNzY5NDkzMDE0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman gown"
+    },
+    {
+      "id": "product-6",
+      "description": "Comfortable denim jeans",
+      "imageUrl": "https://images.unsplash.com/photo-1602293589930-45aad59ba3ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxkZW5pbSUyMGplYW5zfGVufDB8fHx8MTc2OTQzOTMzOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "denim jeans"
+    },
+    {
+      "id": "hero-image",
+      "description": "Hero image for landing page",
+      "imageUrl": "https://images.unsplash.com/photo-1769321725825-96430fa81bd8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmYXNoaW9uJTIwYm91dGlxdWV8ZW58MHx8fHwxNzY5NDI1MTM2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fashion boutique"
+    }
+  ]
 }
