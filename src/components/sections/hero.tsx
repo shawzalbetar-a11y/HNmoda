@@ -8,7 +8,7 @@ export function Hero() {
   return (
     <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center">
       <Image
-        src={`https://picsum.photos/seed/${heroBackground.seed}/${heroBackground.width}/${heroBackground.height}`}
+        src={heroBackground.url}
         alt="Fashion design workspace with fabrics and tools"
         fill
         className="object-cover"
