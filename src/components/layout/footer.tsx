@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { AboutUsModal } from '@/components/sections/about-us';
 import { ContactUsModal } from '@/components/sections/contact-us-modal';
+import { siteConfig } from '@/lib/config';
 
 export function Footer() {
     const { language } = useLanguage();
@@ -33,7 +34,7 @@ export function Footer() {
                     <h4 className="font-semibold">{t.footer.contactInfo}</h4>
                     <address className="mt-2 space-y-1 text-sm not-italic text-muted-foreground">
                         <p>{t.footer.address}</p>
-                        <p>Istanbul, Turkey</p>
+                        <p>{siteConfig.contact.address}</p>
                     </address>
                 </div>
             </div>

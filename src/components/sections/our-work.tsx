@@ -17,6 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { whatsappUrl as siteWhatsappUrl } from '@/lib/config';
 
 const allWork = [
     // Placeholder data
@@ -70,8 +71,7 @@ export function OurWork() {
             -----------------------------
         `.trim().replace(/^\s+/gm, '');
         const encodedMessage = encodeURIComponent(message);
-        // Replace with your WhatsApp number
-        const whatsappUrl = `https://wa.me/905449996865?text=${encodedMessage}`;
+        const whatsappUrl = `${siteWhatsappUrl}?text=${encodedMessage}`;
         window.open(whatsappUrl, '_blank');
         setIsOrderModalOpen(false);
     };

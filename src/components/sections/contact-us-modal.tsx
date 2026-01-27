@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Phone, Mail, MapPin, Send, MessageCircle } from 'lucide-react';
+import { siteConfig, whatsappUrl, telegramUrl } from '@/lib/config';
 
 interface ContactUsModalProps {
     isOpen: boolean;
@@ -22,9 +23,9 @@ export function ContactUsModal({ isOpen, onOpenChange }: ContactUsModalProps) {
   const t = translations[language].contactUs;
 
   const contactMethods = [
-      { icon: <Phone className="w-6 h-6" />, text: t.phone, value: "+90 5449996865" },
-      { icon: <Mail className="w-6 h-6" />, text: t.email, value: "info@hnmoda.tr" },
-      { icon: <MapPin className="w-6 h-6" />, text: t.office, value: "Istanbul, Turkey" },
+      { icon: <Phone className="w-6 h-6" />, text: t.phone, value: siteConfig.contact.phone },
+      { icon: <Mail className="w-6 h-6" />, text: t.email, value: siteConfig.contact.email },
+      { icon: <MapPin className="w-6 h-6" />, text: t.office, value: siteConfig.contact.address },
   ];
 
   return (
@@ -49,12 +50,12 @@ export function ContactUsModal({ isOpen, onOpenChange }: ContactUsModalProps) {
 
             <div className="mt-12 flex justify-center flex-wrap gap-4">
                 <Button asChild size="lg">
-                    <a href="https://wa.me/905449996865" target="_blank" rel="noopener noreferrer">
+                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
                         <MessageCircle className="mr-2 h-5 w-5" /> WhatsApp
                     </a>
                 </Button>
                 <Button asChild size="lg" variant="outline">
-                    <a href="https://t.me/your_telegram_username" target="_blank" rel="noopener noreferrer">
+                    <a href={telegramUrl} target="_blank" rel="noopener noreferrer">
                         <Send className="mr-2 h-5 w-5" /> Telegram
                     </a>
                 </Button>

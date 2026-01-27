@@ -1,11 +1,12 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { MessageCircle } from 'lucide-react';
+import { whatsappUrl } from '@/lib/config';
 
 export function WhatsAppButton() {
     return (
         <a 
-            href="https://wa.me/905000000000"
+            href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="fixed bottom-6 right-6 z-50"
