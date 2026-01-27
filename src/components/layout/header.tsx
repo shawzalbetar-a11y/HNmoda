@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { AboutUsModal } from '@/components/sections/about-us';
 import { ContactUsModal } from '@/components/sections/contact-us-modal';
+import { SpecialOrderModal } from '@/components/sections/special-order-modal';
 
 export function Header() {
   const { language, setLanguage } = useLanguage();
@@ -21,6 +22,7 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isSpecialOrderModalOpen, setIsSpecialOrderModalOpen] = useState(false);
 
   const navLinks = [
     { href: '/', label: t.home },
@@ -36,17 +38,14 @@ export function Header() {
       <div className="container mx-auto flex items-center justify-between h-20 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center space-x-2">
            <div
+              className="relative"
               style={{
                 width: '48px',
                 height: '48px',
-                backgroundImage: "url('/images/logo.png')",
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
               }}
-              role="img"
-              aria-label="HUMAN NATURE Logo"
-            />
+            >
+              <img src="/images/logo.png" alt="HUMAN NATURE Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }}/>
+            </div>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">
@@ -73,11 +72,14 @@ export function Header() {
                 </button>
               );
             }
-            return link.isButton ? (
-              <Button key={link.href} asChild variant="default" size="sm">
-                <Link href={link.href}>{link.label}</Link>
-              </Button>
-            ) : (
+            if (link.isButton) {
+              return (
+                <Button key={link.href} onClick={() => setIsSpecialOrderModalOpen(true)} variant="default" size="sm">
+                  {link.label}
+                </Button>
+              )
+            }
+            return (
               <Link
                 key={link.href}
                 href={link.href}
@@ -150,11 +152,14 @@ export function Header() {
                   </button>
                 )
               }
-              return link.isButton ? (
-                <Button key={link.href} asChild variant="default" className="w-4/5">
-                  <Link href={link.href}>{link.label}</Link>
-                </Button>
-              ) : (
+              if (link.isButton) {
+                return (
+                  <Button key={link.href} onClick={() => { setIsSpecialOrderModalOpen(true); setIsMobileMenuOpen(false); }} className="w-4/5">
+                    {link.label}
+                  </Button>
+                )
+              }
+              return (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -170,6 +175,7 @@ export function Header() {
       )}
        <AboutUsModal isOpen={isAboutModalOpen} onOpenChange={setIsAboutModalOpen} />
        <ContactUsModal isOpen={isContactModalOpen} onOpenChange={setIsContactModalOpen} />
+       <SpecialOrderModal isOpen={isSpecialOrderModalOpen} onOpenChange={setIsSpecialOrderModalOpen} />
     </header>
   );
 }

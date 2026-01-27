@@ -76,6 +76,20 @@ export const translations = {
         email: "E-posta",
         office: "Ofis",
     },
+    specialOrder: {
+        title: 'Özel Sipariş Formu',
+        description: 'Fikrinizi hayata geçirmemize yardımcı olmak için lütfen aşağıdaki ayrıntıları doldurun. Size özel bir teklif ve yol haritası ile geri döneceğiz.',
+        name: 'Ad',
+        surname: 'Soyad',
+        phone: 'Telefon',
+        email: 'E-posta',
+        details: 'Sipariş Detayları',
+        details_placeholder: 'Lütfen tasarım fikrinizi, istediğiniz malzemeleri, ölçüleri ve diğer önemli detayları açıklayın...',
+        quantity: 'Adet',
+        quantity_placeholder: 'Örn: 1, 10, 100',
+        submitButton: 'Sipariş Talebi Gönder',
+        whatsappMessageHeader: 'Yeni Özel Sipariş Talebi'
+    },
     footer: {
       experience: "10 yıllık tecrübe ile modaya yön veriyoruz.",
       quickLinks: "Hızlı Bağlantılar",
@@ -161,6 +175,20 @@ export const translations = {
         email: "Email",
         office: "Office",
     },
+    specialOrder: {
+        title: 'Special Order Form',
+        description: 'Please fill in the details below to help us bring your idea to life. We will get back to you with a custom quote and plan.',
+        name: 'Name',
+        surname: 'Surname',
+        phone: 'Phone',
+        email: 'Email',
+        details: 'Order Details',
+        details_placeholder: 'Please describe your design idea, desired materials, measurements, and any other important details...',
+        quantity: 'Quantity',
+        quantity_placeholder: 'e.g., 1, 10, 100',
+        submitButton: 'Send Order Request',
+        whatsappMessageHeader: 'New Special Order Request'
+    },
     footer: {
       experience: "Shaping fashion with 10 years of experience.",
       quickLinks: "Quick Links",
@@ -245,6 +273,20 @@ export const translations = {
         phone: "الهاتف",
         email: "البريد الإلكتروني",
         office: "المكتب",
+    },
+    specialOrder: {
+        title: 'نموذج الطلب الخاص',
+        description: 'يرجى ملء التفاصيل أدناه لمساعدتنا في تحويل فكرتك إلى حقيقة. سنعود إليك بعرض أسعار وخطة مخصصة.',
+        name: 'الاسم',
+        surname: 'اللقب',
+        phone: 'الهاتف',
+        email: 'البريد الإلكتروني',
+        details: 'تفاصيل الطلب',
+        details_placeholder: 'يرجى وصف فكرة التصميم والمواد المطلوبة والقياسات وأي تفاصيل أخرى مهمة...',
+        quantity: 'الكمية',
+        quantity_placeholder: 'مثال: 1، 10، 100',
+        submitButton: 'إرسال طلب الطلب',
+        whatsappMessageHeader: 'طلب خاص جديد'
     },
     footer: {
       experience: "نصوغ الموضة بخبرة 10 سنوات.",
