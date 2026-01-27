@@ -2,10 +2,15 @@ import type { Metadata, Viewport } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { cn } from '@/lib/utils';
+import { LanguageProvider } from '@/context/language-context';
+import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
+import { WhatsAppButton } from '@/components/shared/whatsapp-button';
 
 export const metadata: Metadata = {
   title: 'HN TextileVerse',
-  description: 'A new app.',
+  description: 'Discover the finest in fashion with HN TextileVerse. Explore our collections of high-quality textiles and designs.',
+  manifest: '/manifest.json',
 };
 
 export const viewport: Viewport = {
@@ -18,13 +23,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+    <html lang="en" dir="ltr">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=PT+Sans:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={cn('font-sans')}>
-        {children}
-        <Toaster />
+      <body className={cn('font-body antialiased')}>
+        <LanguageProvider>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </div>
+          <WhatsAppButton />
+          <Toaster />
+        </LanguageProvider>
       </body>
     </html>
   );

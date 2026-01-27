@@ -1,17 +1,21 @@
+'use client';
+import { Hero } from '@/components/sections/hero';
+import { WhatWeDo } from '@/components/sections/what-we-do';
+import { OurWork } from '@/components/sections/our-work';
+import { ContactUs } from '@/components/sections/contact-us';
+import { useLanguage } from '@/context/language-context';
+import { translations } from '@/lib/translations';
+
 export default function Home() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-          Welcome to your new app
-        </h1>
-        <p className="mt-6 text-lg leading-8 text-muted-foreground">
-          Get started by editing{' '}
-          <code className="rounded bg-muted px-2 py-1 font-mono text-sm">
-            src/app/page.tsx
-          </code>
-        </p>
-      </div>
-    </main>
+    <div>
+      <Hero />
+      <WhatWeDo />
+      <OurWork />
+      <ContactUs />
+    </div>
   );
 }

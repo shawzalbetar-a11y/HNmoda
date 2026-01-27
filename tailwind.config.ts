@@ -18,6 +18,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ['var(--font-sans)', 'sans-serif'],
+        display: ['Playfair Display', 'serif'],
+        body: ['PT Sans', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
