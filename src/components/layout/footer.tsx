@@ -4,10 +4,15 @@ import { useLanguage } from '@/context/language-context';
 import { translations } from '@/lib/translations';
 import { Copyright } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
+import { AboutUsModal } from '@/components/sections/about-us';
+import { ContactUsModal } from '@/components/sections/contact-us-modal';
 
 export function Footer() {
     const { language } = useLanguage();
     const t = translations[language];
+    const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
     return (
         <footer className="bg-secondary text-secondary-foreground py-8">
@@ -19,9 +24,9 @@ export function Footer() {
                 <div>
                     <h4 className="font-semibold">{t.footer.quickLinks}</h4>
                     <ul className="mt-2 space-y-1 text-sm">
-                        <li><Link href="/about" className="hover:underline">{t.header.about}</Link></li>
-                        <li><Link href="/gallery" className="hover:underline">{t.header.gallery}</Link></li>
-                        <li><Link href="/contact" className="hover:underline">{t.header.contact}</Link></li>
+                        <li><button onClick={() => setIsAboutModalOpen(true)} className="bg-transparent border-none p-0 text-left hover:underline">{t.header.about}</button></li>
+                        <li><Link href="/#our-work" className="hover:underline">{t.header.gallery}</Link></li>
+                        <li><button onClick={() => setIsContactModalOpen(true)} className="bg-transparent border-none p-0 text-left hover:underline">{t.header.contact}</button></li>
                     </ul>
                 </div>
                 <div>
@@ -36,6 +41,8 @@ export function Footer() {
                 <Copyright className="h-4 w-4 mr-1" />
                 {new Date().getFullYear()} HUMAN NATURE. {t.footer.rightsReserved}
             </div>
+            <AboutUsModal isOpen={isAboutModalOpen} onOpenChange={setIsAboutModalOpen} />
+            <ContactUsModal isOpen={isContactModalOpen} onOpenChange={setIsContactModalOpen} />
         </footer>
     )
 }
