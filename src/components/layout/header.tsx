@@ -32,18 +32,7 @@ export function Header() {
       <div className="container mx-auto flex items-center justify-between h-20 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center space-x-2">
           {/* To use your logo, place it in `public/logo0.svg` and update the src if needed. */}
-          <div
-            style={{
-              width: '48px',
-              height: '48px',
-              backgroundImage: "url('/logo0.svg')",
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-            }}
-            role="img"
-            aria-label="HUMAN NATURE Logo"
-          />
+          <img src="/logo0.svg" alt="HUMAN NATURE Logo" width="48" height="48" />
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">
