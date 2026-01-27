@@ -35,8 +35,7 @@ export function Header() {
               style={{
                 width: '48px',
                 height: '48px',
-                backgroundColor: 'red',
-                backgroundImage: "url('/logo.png')",
+                backgroundImage: "url('https://picsum.photos/seed/logo/48/48')",
                 backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
