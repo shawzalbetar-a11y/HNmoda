@@ -5,6 +5,7 @@ import { OurWork } from '@/components/sections/our-work';
 import { ContactUs } from '@/components/sections/contact-us';
 import { useLanguage } from '@/context/language-context';
 import { translations } from '@/lib/translations';
+import { AnimateOnScroll } from '@/components/shared/animate-on-scroll';
 
 export default function Home() {
   const { language } = useLanguage();
@@ -13,9 +14,15 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      <WhatWeDo />
-      <OurWork />
-      <ContactUs />
+      <AnimateOnScroll>
+        <WhatWeDo />
+      </AnimateOnScroll>
+      <AnimateOnScroll>
+        <OurWork />
+      </AnimateOnScroll>
+      <AnimateOnScroll>
+        <ContactUs />
+      </AnimateOnScroll>
     </div>
   );
 }
