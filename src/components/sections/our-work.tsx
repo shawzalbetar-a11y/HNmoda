@@ -142,7 +142,7 @@ export function OurWork() {
                         <DialogTitle>{t.orderForm.title}</DialogTitle>
                         <DialogDescription>{t.orderForm.description}</DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4">
+                    <div className="grid gap-4 py-4 overflow-y-auto max-h-[60vh]">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">{t.orderForm.name}</Label>
                             <Input id="name" value={formState.name} onChange={e => setFormState({...formState, name: e.target.value})} className="col-span-3" />

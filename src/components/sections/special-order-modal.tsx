@@ -67,7 +67,7 @@ export function SpecialOrderModal({ isOpen, onOpenChange }: SpecialOrderModalPro
                         {t.description}
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
+                <div className="grid gap-4 py-4 overflow-y-auto max-h-[60vh]">
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="name">{t.name}</Label>
