@@ -1,7 +1,9 @@
 'use client';
 
 export function Hero() {
-  const heroImageUrl = "https://images.unsplash.com/photo-1622372739442-de4a5c53c457?q=80&w=1974&auto=format&fit=crop";
+  // To use your own image, place it in the `public/images` folder
+  // and name it `hero-background.jpg`.
+  const heroImageUrl = "/images/hero-background.jpg";
 
   return (
     <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center">
