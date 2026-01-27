@@ -10,8 +10,8 @@ export function ContactUs() {
     const t = translations[language].contactUs;
 
     const contactMethods = [
-        { icon: <Phone className="w-6 h-6" />, text: t.phone, value: "+90 500 000 00 00" },
-        { icon: <Mail className="w-6 h-6" />, text: t.email, value: "contact@hn-textile.com" },
+        { icon: <Phone className="w-6 h-6" />, text: t.phone, value: "+90 5449996865" },
+        { icon: <Mail className="w-6 h-6" />, text: t.email, value: "info@hnmoda.tr" },
         { icon: <MapPin className="w-6 h-6" />, text: t.office, value: "Istanbul, Turkey" },
     ];
     
@@ -35,7 +35,7 @@ export function ContactUs() {
 
                 <div className="mt-12 flex justify-center flex-wrap gap-4">
                     <Button asChild size="lg">
-                        <a href="https://wa.me/905000000000" target="_blank" rel="noopener noreferrer">
+                        <a href="https://wa.me/905449996865" target="_blank" rel="noopener noreferrer">
                             <MessageCircle className="mr-2 h-5 w-5" /> WhatsApp
                         </a>
                     </Button>

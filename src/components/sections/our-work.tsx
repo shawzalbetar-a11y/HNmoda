@@ -71,7 +71,7 @@ export function OurWork() {
         `.trim().replace(/^\s+/gm, '');
         const encodedMessage = encodeURIComponent(message);
         // Replace with your WhatsApp number
-        const whatsappUrl = `https://wa.me/905000000000?text=${encodedMessage}`;
+        const whatsappUrl = `https://wa.me/905449996865?text=${encodedMessage}`;
         window.open(whatsappUrl, '_blank');
         setIsOrderModalOpen(false);
     };

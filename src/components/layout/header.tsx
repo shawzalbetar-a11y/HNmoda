@@ -12,11 +12,13 @@ import {
 import Link from 'next/link';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { AboutUsModal } from '@/components/sections/about-us';
 
 export function Header() {
   const { language, setLanguage } = useLanguage();
   const t = translations[language].header;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
 
   const navLinks = [
     { href: '/', label: t.home },
@@ -33,8 +35,8 @@ export function Header() {
         <Link href="/" className="flex items-center space-x-2">
            <div
               style={{
-                width: '48px',
-                height: '48px',
+                width: '150px',
+                height: '200px',
                 backgroundImage: "url('/images/logo.png')",
                 backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
@@ -46,8 +48,19 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">
-          {navLinks.map((link) =>
-            link.isButton ? (
+          {navLinks.map((link) => {
+             if (link.href === '/about') {
+              return (
+                <button
+                  key={link.href}
+                  onClick={() => setIsAboutModalOpen(true)}
+                  className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+                >
+                  {link.label}
+                </button>
+              );
+            }
+            return link.isButton ? (
               <Button key={link.href} asChild variant="default" size="sm">
                 <Link href={link.href}>{link.label}</Link>
               </Button>
@@ -60,7 +73,7 @@ export function Header() {
                 {link.label}
               </Link>
             )
-          )}
+          })}
         </nav>
 
         <div className="flex items-center space-x-4">
@@ -95,8 +108,22 @@ export function Header() {
           )}
         >
           <nav className="flex flex-col items-center space-y-4 py-8">
-            {navLinks.map((link) =>
-              link.isButton ? (
+            {navLinks.map((link) => {
+              if (link.href === '/about') {
+                return (
+                   <button
+                    key={link.href}
+                    onClick={() => {
+                      setIsAboutModalOpen(true);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </button>
+                )
+              }
+              return link.isButton ? (
                 <Button key={link.href} asChild variant="default" className="w-4/5">
                   <Link href={link.href}>{link.label}</Link>
                 </Button>
@@ -110,10 +137,11 @@ export function Header() {
                   {link.label}
                 </Link>
               )
-            )}
+            })}
           </nav>
         </div>
       )}
+       <AboutUsModal isOpen={isAboutModalOpen} onOpenChange={setIsAboutModalOpen} />
     </header>
   );
 }

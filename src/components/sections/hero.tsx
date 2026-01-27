@@ -18,7 +18,7 @@ export function Hero() {
         <h1 className="text-5xl md:text-7xl font-display font-bold text-foreground">
           HUMAN NATURE
         </h1>
-        <p className="mt-2 text-lg text-foreground/80">hnmoda</p>
+        <p className="mt-2 text-lg text-foreground/80">HN MODA</p>
       </div>
     </section>
   );

@@ -8,6 +8,16 @@ export const translations = {
       about: 'Hakkımızda',
       specialOrder: 'Özel Sipariş',
     },
+    aboutUs: {
+      title: 'HN moda Hakkında',
+      intro: 'İstanbul\'un kalbinde yer alan, ısmarlama ve kaliteli tekstil üretimindeki ortağınız.',
+      specialT: 'Özel Terzilik',
+      specialT_desc: 'Tek parçadan büyük miktarlara kadar sipariş üzerine giysiler konusunda uzmanız. Atölyemiz, benzersiz tasarım ihtiyaçlarınızı karşılayacak donanıma sahiptir.',
+      clients: 'Müşterilerimiz',
+      clients_desc: 'Dikiş atölyeleri, moda girişimleri ve benzersiz parçalar arayan bireyler de dahil olmak üzere çeşitli bir müşteri kitlesine hizmet veriyoruz. Hem küçük hem de büyük parti üretim çalışmaları sunarak esnekliğimizle gurur duyuyoruz.',
+      mission: 'Misyonumuz',
+      mission_desc: 'Yeni stiller icat etmek ve moda fikirlerinizi kusursuz kalite ve işçilikle hayata geçirmek. Tekstil inovasyonunun ön saflarında olmaya kararlıyız.',
+    },
     whatWeDo: {
         title: "Ne Yapıyoruz?",
         subtitle: "Markamızın sunduğu çeşitli hizmetleri keşfedin.",
@@ -83,6 +93,16 @@ export const translations = {
       about: 'About Us',
       specialOrder: 'Special Order',
     },
+    aboutUs: {
+      title: 'About HN moda',
+      intro: 'Your partner in bespoke and quality textile manufacturing, located in the heart of Istanbul.',
+      specialT: 'Custom Tailoring',
+      specialT_desc: 'We specialize in made-to-order garments, from single pieces to large quantities. Our workshop is equipped to handle your unique design needs.',
+      clients: 'Our Clients',
+      clients_desc: 'We serve a diverse clientele, including sewing workshops, fashion startups, and individuals seeking unique pieces. We pride ourselves on our flexibility, offering both small and large batch production runs.',
+      mission: 'Our Mission',
+      mission_desc: 'To invent new styles and bring your fashion ideas to life with impeccable quality and craftsmanship. We are committed to being at the forefront of textile innovation.'
+    },
      whatWeDo: {
         title: "What We Do?",
         subtitle: "Discover the various services our brand offers.",
@@ -157,6 +177,16 @@ export const translations = {
       contact: 'التواصل',
       about: 'من نحن',
       specialOrder: 'طلب خاص',
+    },
+    aboutUs: {
+      title: 'حول HN موضة',
+      intro: 'شريكك في تصنيع المنسوجات عالية الجودة والمصممة خصيصًا، في قلب اسطنبول.',
+      specialT: 'خياطة مخصصة',
+      specialT_desc: 'نحن متخصصون في الملابس المصنوعة حسب الطلب، من قطعة واحدة إلى كميات كبيرة. ورشة العمل لدينا مجهزة لتلبية احتياجات التصميم الفريدة الخاصة بك.',
+      clients: 'عملاؤنا',
+      clients_desc: 'نحن نخدم مجموعة متنوعة من العملاء، بما في ذلك ورش الخياطة، والشركات الناشئة في مجال الأزياء، والأفراد الذين يبحثون عن قطع فريدة. نحن نفخر بمرونتنا، حيث نقدم خدمات إنتاج الدفعات الصغيرة والكبيرة.',
+      mission: 'مهمتنا',
+      mission_desc: 'ابتكار أنماط جديدة وإحياء أفكار الموضة الخاصة بك بجودة وحرفية لا تشوبها شائبة. نحن ملتزمون بأن نكون في طليعة الابتكار في مجال المنسوجات.'
     },
     whatWeDo: {
         title: "ماذا نفعل؟",
