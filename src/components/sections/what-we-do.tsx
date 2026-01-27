@@ -2,7 +2,7 @@
 import { useLanguage } from '@/context/language-context';
 import { translations } from '@/lib/translations';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { SewingPinIcon, ShirtIcon, StarIcon } from 'lucide-react';
+import { Scissors, Shirt, Star } from 'lucide-react';
 
 export function WhatWeDo() {
     const { language } = useLanguage();
@@ -17,7 +17,7 @@ export function WhatWeDo() {
                 t.specialModels.point2,
                 t.specialModels.point3,
             ],
-            icon: <StarIcon className="w-8 h-8 text-primary" />
+            icon: <Star className="w-8 h-8 text-primary" />
         },
         {
             title: t.ourCollections.title,
@@ -27,7 +27,7 @@ export function WhatWeDo() {
                 t.ourCollections.point2,
                 t.ourCollections.point3,
             ],
-            icon: <ShirtIcon className="w-8 h-8 text-primary" />
+            icon: <Shirt className="w-8 h-8 text-primary" />
         },
         {
             title: t.byThePiece.title,
@@ -37,7 +37,7 @@ export function WhatWeDo() {
                 t.byThePiece.point2,
                 t.byThePiece.point3,
             ],
-            icon: <SewingPinIcon className="w-8 h-8 text-primary" />
+            icon: <Scissors className="w-8 h-8 text-primary" />
         }
     ];
 
