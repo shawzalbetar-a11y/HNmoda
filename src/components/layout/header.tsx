@@ -35,6 +35,7 @@ export function Header() {
               style={{
                 width: '48px',
                 height: '48px',
+                backgroundColor: 'red',
                 backgroundImage: "url('/logo.png')",
                 backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
