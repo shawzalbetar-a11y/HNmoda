@@ -13,7 +13,7 @@ export function Footer() {
         <footer className="bg-secondary text-secondary-foreground py-8">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                    <h3 className="text-xl font-bold font-display">HN TextileVerse</h3>
+                    <h3 className="text-xl font-bold font-display">HUMAN NATURE</h3>
                     <p className="mt-2 text-sm text-muted-foreground">{t.footer.experience}</p>
                 </div>
                 <div>
@@ -34,7 +34,7 @@ export function Footer() {
             </div>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-8 border-t border-border pt-4 flex items-center justify-center text-xs text-muted-foreground">
                 <Copyright className="h-4 w-4 mr-1" />
-                {new Date().getFullYear()} HN TextileVerse. {t.footer.rightsReserved}
+                {new Date().getFullYear()} HUMAN NATURE. {t.footer.rightsReserved}
             </div>
         </footer>
     )

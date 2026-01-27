@@ -8,8 +8,8 @@ import { Footer } from '@/components/layout/footer';
 import { WhatsAppButton } from '@/components/shared/whatsapp-button';
 
 export const metadata: Metadata = {
-  title: 'HN TextileVerse',
-  description: 'Discover the finest in fashion with HN TextileVerse. Explore our collections of high-quality textiles and designs.',
+  title: 'HUMAN NATURE',
+  description: 'Discover the finest in fashion with HUMAN NATURE. Explore our collections of high-quality textiles and designs.',
   manifest: '/manifest.json',
 };
 
