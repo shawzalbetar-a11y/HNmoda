@@ -1,14 +1,14 @@
 'use client';
 
 export function Hero() {
-  const heroImageUrl = "https://images.unsplash.com/photo-1596796614114-c151b181e59b?q=80&w=1974&auto=format=fit=crop";
+  const heroImageUrl = "https://images.unsplash.com/photo-1622372739442-de4a5c53c457?q=80&w=1974&auto=format&fit=crop";
 
   return (
     <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url('${heroImageUrl}')` }}
-        data-ai-hint="tailor fabric"
+        data-ai-hint="luxury fabric rolls"
       />
       <div className="absolute inset-0 bg-black/30" />
       {/* Centered Text Overlay */}
