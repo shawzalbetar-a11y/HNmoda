@@ -24,7 +24,7 @@ export function Header() {
 
   const navLinks = [
     { href: '/', label: t.home },
-    { href: '/categories', label: t.categories },
+    { href: '/#what-we-do', label: t.categories },
     { href: '/#our-work', label: t.gallery },
     { href: '/contact', label: t.contact },
     { href: '/about', label: t.about },
