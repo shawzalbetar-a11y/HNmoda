@@ -36,7 +36,7 @@ export function Header() {
             style={{
               width: '48px',
               height: '48px',
-              backgroundImage: 'url(/logo0.svg)',
+              backgroundImage: "url('/logo0.svg')",
               backgroundSize: 'contain',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
