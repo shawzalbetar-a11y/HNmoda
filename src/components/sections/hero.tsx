@@ -1,18 +1,15 @@
 'use client';
 import Image from 'next/image';
-import placeholderImages from '@/lib/placeholder-images.json';
 
 export function Hero() {
-  const { heroBackground } = placeholderImages;
-
   return (
     <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center">
       <Image
-        src={heroBackground.url}
+        src="https://images.unsplash.com/photo-1516762689617-e1cff2436c88?q=80&w=1974&auto=format&fit=crop"
         alt="Fashion design workspace with fabrics and tools"
         fill
         className="object-cover"
-        data-ai-hint={heroBackground.hint}
+        data-ai-hint="fashion workspace"
         priority
       />
       {/* Centered Text Overlay */}
