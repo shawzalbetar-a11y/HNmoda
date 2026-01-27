@@ -2,7 +2,7 @@
 import Image from 'next/image';
 
 export function Hero() {
-  const heroImageUrl = "https://storage.googleapis.com/maker-studio-project-files-prod/9e00a58a-f748-433b-b153-f11181832168/images/84105434-2e5a-436f-87e3-057088924b61";
+  const heroImageUrl = "https://picsum.photos/seed/herobackground/1200/800";
 
   return (
     <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center">
