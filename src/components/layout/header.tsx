@@ -13,12 +13,14 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { AboutUsModal } from '@/components/sections/about-us';
+import { ContactUsModal } from '@/components/sections/contact-us-modal';
 
 export function Header() {
   const { language, setLanguage } = useLanguage();
   const t = translations[language].header;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const navLinks = [
     { href: '/', label: t.home },
@@ -35,8 +37,8 @@ export function Header() {
         <Link href="/" className="flex items-center space-x-2">
            <div
               style={{
-                width: '150px',
-                height: '200px',
+                width: '48px',
+                height: '48px',
                 backgroundImage: "url('/images/logo.png')",
                 backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
@@ -54,6 +56,17 @@ export function Header() {
                 <button
                   key={link.href}
                   onClick={() => setIsAboutModalOpen(true)}
+                  className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+                >
+                  {link.label}
+                </button>
+              );
+            }
+            if (link.href === '/contact') {
+              return (
+                <button
+                  key={link.href}
+                  onClick={() => setIsContactModalOpen(true)}
                   className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
                 >
                   {link.label}
@@ -123,6 +136,20 @@ export function Header() {
                   </button>
                 )
               }
+              if (link.href === '/contact') {
+                return (
+                   <button
+                    key={link.href}
+                    onClick={() => {
+                      setIsContactModalOpen(true);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </button>
+                )
+              }
               return link.isButton ? (
                 <Button key={link.href} asChild variant="default" className="w-4/5">
                   <Link href={link.href}>{link.label}</Link>
@@ -142,6 +169,7 @@ export function Header() {
         </div>
       )}
        <AboutUsModal isOpen={isAboutModalOpen} onOpenChange={setIsAboutModalOpen} />
+       <ContactUsModal isOpen={isContactModalOpen} onOpenChange={setIsContactModalOpen} />
     </header>
   );
 }
