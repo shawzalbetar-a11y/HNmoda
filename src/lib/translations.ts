@@ -67,7 +67,8 @@ export const translations = {
             submitButton: "Gönder",
             whatsappMessageHeader: "Yeni Sipariş Talebi",
             product: "Ürün",
-        }
+        },
+        soldOut: "TÜKENDİ",
     },
     contactUs: {
         title: "Bize Ulaşın",
@@ -132,6 +133,15 @@ export const translations = {
         itemDeleted: "Öğe başarıyla silindi.",
         errorOccurred: "Bir hata oluştu.",
         price: "Fiyat",
+        itemType: "Ürün Tipi",
+        season: "Sezon",
+        inventoryStatus: "Stok Durumu",
+        springSummer: "İlkbahar/Yaz",
+        fallWinter: "Sonbahar/Kış",
+        allSeason: "Tüm Sezon",
+        available: "Mevcut",
+        soldOut: "Tükendi",
+        videoUrl: "Video URL'si (Opsiyonel)",
     }
   },
   en: {
@@ -202,7 +212,8 @@ export const translations = {
             submitButton: "Submit",
             whatsappMessageHeader: "New Order Request",
             product: "Product",
-        }
+        },
+        soldOut: "SOLD OUT",
     },
      contactUs: {
         title: "Contact Us",
@@ -267,6 +278,15 @@ export const translations = {
         itemDeleted: "Item deleted successfully.",
         errorOccurred: "An error occurred.",
         price: "Price",
+        itemType: "Item Type",
+        season: "Season",
+        inventoryStatus: "Inventory Status",
+        springSummer: "Spring/Summer",
+        fallWinter: "Fall/Winter",
+        allSeason: "All-Season",
+        available: "Available",
+        soldOut: "Sold Out",
+        videoUrl: "Video URL (Optional)",
     }
   },
   ar: {
@@ -337,7 +357,8 @@ export const translations = {
             submitButton: "إرسال",
             whatsappMessageHeader: "طلب جديد",
             product: "المنتج",
-        }
+        },
+        soldOut: "نفذت الكمية",
     },
     contactUs: {
         title: "اتصل بنا",
@@ -402,6 +423,15 @@ export const translations = {
         itemDeleted: "تم حذف العنصر بنجاح.",
         errorOccurred: "حدث خطأ ما.",
         price: "السعر",
+        itemType: "نوع القطعة",
+        season: "الموسم",
+        inventoryStatus: "حالة المخزون",
+        springSummer: "ربيع/صيف",
+        fallWinter: "خريف/شتاء",
+        allSeason: "كل المواسم",
+        available: "متوفر",
+        soldOut: "نفذت الكمية",
+        videoUrl: "رابط الفيديو (اختياري)",
     }
   },
 };

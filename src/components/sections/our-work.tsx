@@ -29,8 +29,9 @@ type WorkItem = {
     category: string, 
     url: string, 
     name: string,
-    type: 'image' | 'video',
-    price?: number 
+    mediaType: 'image' | 'video',
+    price?: number,
+    inventoryStatus: 'available' | 'sold out',
 };
 
 
@@ -122,8 +123,11 @@ export function OurWork() {
                                 <CardContent className="p-0">
                                     <div className="relative aspect-[3/4]">
                                         <Image src={work.url} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
-                                        {work.type === 'video' && (
+                                        {work.mediaType === 'video' && (
                                             <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
+                                        )}
+                                        {work.inventoryStatus === 'sold out' && (
+                                            <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded">{t.soldOut}</div>
                                         )}
                                     </div>
                                 </CardContent>
@@ -149,7 +153,7 @@ export function OurWork() {
                         </DialogHeader>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4">
                             <div className="relative aspect-[3/4]">
-                                {selectedWork.type === 'image' ? (
+                                {selectedWork.mediaType === 'image' ? (
                                     <Image src={selectedWork.url} alt={selectedWork.name} fill className="object-cover rounded-md" data-ai-hint="fashion product" />
                                 ) : (
                                     <video src={selectedWork.url} className="w-full h-full object-cover rounded-md" controls autoPlay muted loop playsInline />
@@ -162,9 +166,12 @@ export function OurWork() {
                                         <p className="text-2xl font-bold text-primary mb-4">{selectedWork.price} TL</p>
                                     )}
                                 </DialogDescription>
-                                <Button onClick={() => {
-                                    setIsOrderModalOpen(true);
-                                }}>{t.imagePopup.orderButton}</Button>
+                                <Button 
+                                    onClick={() => { setIsOrderModalOpen(true); }}
+                                    disabled={selectedWork.inventoryStatus === 'sold out'}
+                                >
+                                    {selectedWork.inventoryStatus === 'sold out' ? t.soldOut : t.imagePopup.orderButton}
+                                </Button>
                             </div>
                         </div>
                     </DialogContent>

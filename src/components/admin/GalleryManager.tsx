@@ -38,9 +38,13 @@ import { translations } from '@/lib/translations';
 type GalleryItem = {
     id: string;
     url: string;
-    type: 'image' | 'video';
+    videoUrl?: string;
+    mediaType: 'image' | 'video';
     category: 'models' | 'collections' | 'products';
     name: string;
+    itemType: string;
+    season: 'Spring/Summer' | 'Fall/Winter' | 'All-Season';
+    inventoryStatus: 'available' | 'sold out';
     createdAt: any;
     price?: number;
 };
@@ -48,8 +52,15 @@ type GalleryItem = {
 const formSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
     url: z.string().url({ message: "Please enter a valid URL." }),
+    videoUrl: z.preprocess(
+        (val) => (val === "" ? undefined : val),
+        z.string().url({ message: "Please enter a valid URL." }).optional()
+    ),
     category: z.enum(['models', 'collections', 'products']),
-    type: z.enum(['image', 'video']),
+    mediaType: z.enum(['image', 'video']),
+    itemType: z.string().min(1, { message: "Item type is required." }),
+    season: z.enum(['Spring/Summer', 'Fall/Winter', 'All-Season']),
+    inventoryStatus: z.enum(['available', 'sold out']),
     price: z.preprocess(
         (val) => (val === "" || val === null ? undefined : val),
         z.coerce.number({invalid_type_error: "Please enter a valid number."}).positive({ message: "Price must be positive." }).optional()
@@ -79,8 +90,12 @@ export function GalleryManager() {
         defaultValues: {
             name: '',
             url: '',
+            videoUrl: '',
             category: 'models',
-            type: 'image',
+            mediaType: 'image',
+            itemType: '',
+            season: 'All-Season',
+            inventoryStatus: 'available',
             price: undefined,
         },
     });
@@ -117,8 +132,12 @@ export function GalleryManager() {
         setEditingItem(item);
         setValue('name', item.name);
         setValue('url', item.url);
+        setValue('videoUrl', item.videoUrl || '');
         setValue('category', item.category);
-        setValue('type', item.type);
+        setValue('mediaType', item.mediaType);
+        setValue('itemType', item.itemType);
+        setValue('season', item.season);
+        setValue('inventoryStatus', item.inventoryStatus);
         setValue('price', item.price);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -138,33 +157,63 @@ export function GalleryManager() {
                 <CardContent>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t.name}</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="e.g. Elegant Dress" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="url"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t.url}</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="https://example.com/image.webp" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t.name}</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="e.g. Elegant Dress" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="itemType"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t.itemType}</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="e.g. Dress, Shirt" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <FormField
+                                    control={form.control}
+                                    name="url"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t.url}</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="https://example.com/image.webp" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="videoUrl"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t.videoUrl}</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="https://youtube.com/watch?v=..." {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                 <FormField
                                     control={form.control}
                                     name="category"
@@ -189,7 +238,7 @@ export function GalleryManager() {
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="type"
+                                    name="mediaType"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>{t.type}</FormLabel>
@@ -202,6 +251,49 @@ export function GalleryManager() {
                                                 <SelectContent>
                                                     <SelectItem value="image">{t.image}</SelectItem>
                                                     <SelectItem value="video">{t.video}</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="season"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t.season}</FormLabel>
+                                            <Select onValueChange={field.onChange} value={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select a season" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="Spring/Summer">{t.springSummer}</SelectItem>
+                                                    <SelectItem value="Fall/Winter">{t.fallWinter}</SelectItem>
+                                                    <SelectItem value="All-Season">{t.allSeason}</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="inventoryStatus"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t.inventoryStatus}</FormLabel>
+                                            <Select onValueChange={field.onChange} value={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select a status" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="available">{t.available}</SelectItem>
+                                                    <SelectItem value="sold out">{t.soldOut}</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage />
@@ -254,15 +346,19 @@ export function GalleryManager() {
                             {galleryItems.map((item) => (
                                 <Card key={item.id} className="group relative overflow-hidden">
                                     <div className="relative aspect-[3/4]">
-                                        {item.type === 'image' ? (
+                                        {item.mediaType === 'image' ? (
                                             <Image src={item.url} alt={item.name} fill className="object-cover"/>
                                         ) : (
                                             <video src={item.url} className="w-full h-full object-cover" muted loop playsInline />
                                         )}
+                                        {item.inventoryStatus === 'sold out' && (
+                                            <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded-md">{t.soldOut.toUpperCase()}</div>
+                                        )}
                                     </div>
                                     <div className="p-2 text-sm">
                                         <p className="font-semibold truncate">{item.name}</p>
-                                        <p className="text-xs text-muted-foreground">{item.category} / {item.type}</p>
+                                        <p className="text-xs text-muted-foreground">{item.category} / {item.mediaType}</p>
+                                        <p className="text-xs text-muted-foreground">{item.itemType} - {item.season}</p>
                                         {item.category === 'products' && item.price && (
                                             <p className="font-semibold text-sm pt-1">{item.price} TL</p>
                                         )}

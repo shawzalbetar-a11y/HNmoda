@@ -15,8 +15,12 @@ import { FirestorePermissionError } from '../errors';
 type GalleryItemData = {
     name: string;
     url: string;
+    videoUrl?: string;
     category: 'models' | 'collections' | 'products';
-    type: 'image' | 'video';
+    mediaType: 'image' | 'video';
+    itemType: string;
+    season: 'Spring/Summer' | 'Fall/Winter' | 'All-Season';
+    inventoryStatus: 'available' | 'sold out';
     price?: number;
 };
 
