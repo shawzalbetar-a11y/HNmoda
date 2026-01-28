@@ -34,9 +34,9 @@ type WorkItem = {
     inventoryStatus: 'available' | 'sold out',
 };
 
-const getYouTubeEmbedUrl = (url: string): string | null => {
+const getYouTubeVideoId = (url: string): string | null => {
     if (!url) return null;
-    let videoId = '';
+    let videoId: string | null = null;
     try {
         const urlObj = new URL(url);
         if (urlObj.hostname.includes('youtube.com')) {
@@ -52,15 +52,24 @@ const getYouTubeEmbedUrl = (url: string): string | null => {
             videoId = urlObj.pathname.substring(1).split('?')[0];
         }
     } catch (e) {
-        // Invalid URL, likely a direct video link
         return null;
     }
+    return videoId;
+};
 
+const getYouTubeEmbedUrl = (url: string): string | null => {
+    const videoId = getYouTubeVideoId(url);
     if (videoId) {
-        // Add autoplay and mute for a better experience
         return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
     }
+    return null;
+};
 
+const getYouTubeThumbnailUrl = (url: string): string | null => {
+    const videoId = getYouTubeVideoId(url);
+    if (videoId) {
+        return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    }
     return null;
 };
 
@@ -157,30 +166,35 @@ export function OurWork() {
 
                 {!loading && filteredWork && filteredWork.length > 0 && (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {filteredWork.map(work => (
-                            <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
-                                <CardContent className="p-0">
-                                    <div className="relative aspect-[3/4]">
-                                        {work.mediaType === 'image' ? (
-                                            <Image src={work.url} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
-                                        ) : (
-                                            <video src={work.url} className="w-full h-full object-cover" muted loop playsInline />
-                                        )}
-                                        {work.mediaType === 'video' && (
-                                            <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
-                                        )}
-                                        {work.inventoryStatus === 'sold out' && (
-                                            <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded">{t.soldOut}</div>
-                                        )}
-                                    </div>
-                                </CardContent>
-                                {work.category === 'products' && work.price && (
-                                    <div className="p-2 border-t text-center">
-                                        <p className="font-bold text-foreground">{work.price} TL</p>
-                                    </div>
-                                )}
-                            </Card>
-                        ))}
+                        {filteredWork.map(work => {
+                            const isYouTubeVideo = work.mediaType === 'video' && getYouTubeVideoId(work.url);
+                            const thumbnailUrl = isYouTubeVideo ? getYouTubeThumbnailUrl(work.url) : work.url;
+                            
+                            return (
+                                <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
+                                    <CardContent className="p-0">
+                                        <div className="relative aspect-[3/4]">
+                                            {(work.mediaType === 'image' || isYouTubeVideo) && thumbnailUrl ? (
+                                                <Image src={thumbnailUrl} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
+                                            ) : (
+                                                <video src={work.url} className="w-full h-full object-cover" muted loop playsInline />
+                                            )}
+                                            {work.mediaType === 'video' && (
+                                                <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
+                                            )}
+                                            {work.inventoryStatus === 'sold out' && (
+                                                <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded">{t.soldOut}</div>
+                                            )}
+                                        </div>
+                                    </CardContent>
+                                    {work.category === 'products' && work.price && (
+                                        <div className="p-2 border-t text-center">
+                                            <p className="font-bold text-foreground">{work.price} TL</p>
+                                        </div>
+                                    )}
+                                </Card>
+                            );
+                        })}
                     </div>
                 )}
                  {!loading && (!filteredWork || filteredWork.length === 0) && (
