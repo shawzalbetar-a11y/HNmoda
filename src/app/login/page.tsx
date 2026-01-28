@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useAuth } from '@/firebase';
+import { useAuth, useFirestore } from '@/firebase';
+import { upsertUserProfile } from '@/firebase/firestore/users';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -18,6 +19,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const auth = useAuth();
+  const firestore = useFirestore(); // Get firestore instance
   const router = useRouter();
   const { toast } = useToast();
   const { language } = useLanguage();
@@ -27,9 +29,16 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    if (!auth) return;
+    if (!auth || !firestore) {
+        setLoading(false);
+        return;
+    };
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      
+      // On successful login, create/update the user's profile document.
+      upsertUserProfile(firestore, userCredential.user);
+
       router.push('/admin');
     } catch (error: any) {
       toast({
