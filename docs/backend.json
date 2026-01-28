@@ -23,7 +23,7 @@
     },
     "galleryItem": {
       "title": "Gallery Item",
-      "description": "An image or video in the gallery, representing a model, collection, or product.",
+      "description": "An item in the gallery, which can include multiple images and a video.",
       "type": "object",
       "properties": {
         "name": {
@@ -37,12 +37,22 @@
         "url": {
           "type": "string",
           "format": "uri",
-          "description": "URL of the primary media (webp image)."
+          "description": "URL of the primary thumbnail image."
         },
-        "mediaType": {
-          "type": "string",
-          "enum": ["image", "video"],
-          "description": "Type of the primary media."
+        "imageUrl2": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional: URL for the 2nd image."
+        },
+        "imageUrl3": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional: URL for the 3rd image."
+        },
+        "imageUrl4": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional: URL for the 4th image."
         },
         "videoUrl": {
             "type": "string",
@@ -78,7 +88,7 @@
             "description": "Timestamp of creation."
         }
       },
-      "required": ["url", "mediaType", "category", "name", "createdAt", "inventoryStatus", "itemType", "season"]
+      "required": ["url", "category", "name", "createdAt", "inventoryStatus", "itemType", "season"]
     },
     "siteConfig": {
         "title": "Site Configuration",

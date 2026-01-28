@@ -21,19 +21,30 @@ import { PlayCircle } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, orderBy } from 'firebase/firestore';
 import { Spinner } from '@/components/ui/spinner';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { cn } from '@/lib/utils';
 
 
 type WorkItem = {
-    id: string,
-    category: string,
-    url: string,
-    name: string,
-    mediaType: 'image' | 'video',
-    price?: number,
-    inventoryStatus: 'available' | 'sold out',
-    itemType: string,
-    season: 'Spring/Summer' | 'Fall/Winter' | 'All-Season',
-    description?: string,
+    id: string;
+    category: string;
+    url: string;
+    imageUrl2?: string;
+    imageUrl3?: string;
+    imageUrl4?: string;
+    videoUrl?: string;
+    name: string;
+    price?: number;
+    inventoryStatus: 'available' | 'sold out';
+    itemType: string;
+    season: 'Spring/Summer' | 'Fall/Winter' | 'All-Season';
+    description?: string;
 };
 
 const getYouTubeVideoId = (url: string): string | null => {
@@ -111,17 +122,11 @@ export function OurWork() {
     const filteredWork = !allWork
         ? []
         : allWork.filter(work => {
-            const isInvalidImage = work.mediaType === 'image' && (work.url.includes('youtube.com') || work.url.includes('youtu.be'));
-            if (isInvalidImage) {
-                return false; // Exclude invalid items from public view
-            }
             if (activeFilter === 'all') {
                 return true;
             }
             return work.category === activeFilter;
         });
-
-    const embedUrl = selectedWork ? getYouTubeEmbedUrl(selectedWork.url) : null;
         
     const handleOrderSubmit = () => {
         const message = `
@@ -152,6 +157,17 @@ export function OurWork() {
         return tAdmin[mappedKey] || key;
     };
 
+    const mediaForSelectedWork = useMemo(() => {
+        if (!selectedWork) return [];
+        const media = [];
+        if (selectedWork.url) media.push({ type: 'image', url: selectedWork.url });
+        if (selectedWork.imageUrl2) media.push({ type: 'image', url: selectedWork.imageUrl2 });
+        if (selectedWork.imageUrl3) media.push({ type: 'image', url: selectedWork.imageUrl3 });
+        if (selectedWork.imageUrl4) media.push({ type: 'image', url: selectedWork.imageUrl4 });
+        if (selectedWork.videoUrl) media.push({ type: 'video', url: selectedWork.videoUrl });
+        return media;
+    }, [selectedWork]);
+
 
     return (
         <section id="our-work" className="py-20 bg-secondary">
@@ -181,35 +197,26 @@ export function OurWork() {
 
                 {!loading && filteredWork && filteredWork.length > 0 && (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {filteredWork.map(work => {
-                            const isYouTubeVideo = work.mediaType === 'video' && getYouTubeVideoId(work.url);
-                            const thumbnailUrl = isYouTubeVideo ? getYouTubeThumbnailUrl(work.url) : work.url;
-                            
-                            return (
-                                <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
-                                    <CardContent className="p-0">
-                                        <div className="relative aspect-[3/4]">
-                                            {(work.mediaType === 'image' || isYouTubeVideo) && thumbnailUrl ? (
-                                                <Image src={thumbnailUrl} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
-                                            ) : (
-                                                <video src={work.url} className="w-full h-full object-cover" muted loop playsInline />
-                                            )}
-                                            {work.mediaType === 'video' && (
-                                                <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
-                                            )}
-                                            {work.inventoryStatus === 'sold out' && (
-                                                <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded">{t.soldOut}</div>
-                                            )}
-                                        </div>
-                                    </CardContent>
-                                    {work.category === 'products' && work.price && (
-                                        <div className="p-2 border-t text-center">
-                                            <p className="font-bold text-foreground">{work.price} TL</p>
-                                        </div>
-                                    )}
-                                </Card>
-                            );
-                        })}
+                        {filteredWork.map(work => (
+                            <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
+                                <CardContent className="p-0">
+                                    <div className="relative aspect-[3/4]">
+                                        <Image src={work.url} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
+                                        {work.videoUrl && (
+                                            <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
+                                        )}
+                                        {work.inventoryStatus === 'sold out' && (
+                                            <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded">{t.soldOut}</div>
+                                        )}
+                                    </div>
+                                </CardContent>
+                                {work.category === 'products' && work.price && (
+                                    <div className="p-2 border-t text-center">
+                                        <p className="font-bold text-foreground">{work.price} TL</p>
+                                    </div>
+                                )}
+                            </Card>
+                        ))}
                     </div>
                 )}
                  {!loading && (!filteredWork || filteredWork.length === 0) && (
@@ -224,22 +231,36 @@ export function OurWork() {
                             <DialogTitle>{selectedWork.name}</DialogTitle>
                         </DialogHeader>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4">
-                            <div className="relative aspect-[3/4]">
-                                {selectedWork.mediaType === 'image' ? (
-                                    <Image src={selectedWork.url} alt={selectedWork.name} fill className="object-cover rounded-md" data-ai-hint="fashion product" />
-                                ) : embedUrl ? (
-                                    <iframe
-                                        className="w-full h-full rounded-md"
-                                        src={embedUrl}
-                                        title={selectedWork.name}
-                                        frameBorder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    ></iframe>
-                                ) : (
-                                    <video src={selectedWork.url} className="w-full h-full object-cover rounded-md" controls autoPlay muted loop playsInline />
+                            <Carousel className="w-full">
+                                <CarouselContent>
+                                    {mediaForSelectedWork.map((media, index) => (
+                                        <CarouselItem key={index}>
+                                            <div className="relative aspect-[3/4]">
+                                                {media.type === 'image' ? (
+                                                    <Image src={media.url} alt={`${selectedWork.name} - ${index + 1}`} fill className="object-cover rounded-md" />
+                                                ) : getYouTubeEmbedUrl(media.url) ? (
+                                                    <iframe
+                                                        className="w-full h-full rounded-md"
+                                                        src={getYouTubeEmbedUrl(media.url)}
+                                                        title={selectedWork.name}
+                                                        frameBorder="0"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowFullScreen
+                                                    ></iframe>
+                                                ) : (
+                                                    <video src={media.url} className="w-full h-full object-cover rounded-md" controls autoPlay muted loop playsInline />
+                                                )}
+                                            </div>
+                                        </CarouselItem>
+                                    ))}
+                                </CarouselContent>
+                                {mediaForSelectedWork.length > 1 && (
+                                    <>
+                                        <CarouselPrevious className="left-2" />
+                                        <CarouselNext className="right-2" />
+                                    </>
                                 )}
-                            </div>
+                            </Carousel>
                             <div className="flex flex-col">
                                 <div className="space-y-4">
                                     {selectedWork.category === 'products' && selectedWork.price && (

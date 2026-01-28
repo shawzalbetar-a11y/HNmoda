@@ -39,8 +39,10 @@ import { translations } from '@/lib/translations';
 type GalleryItem = {
     id: string;
     url: string;
+    imageUrl2?: string;
+    imageUrl3?: string;
+    imageUrl4?: string;
     videoUrl?: string;
-    mediaType: 'image' | 'video';
     category: 'models' | 'collections' | 'products';
     name: string;
     itemType: string;
@@ -54,12 +56,14 @@ type GalleryItem = {
 const formSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
     url: z.string().url({ message: "Please enter a valid URL." }),
+    imageUrl2: z.preprocess((val) => (val === "" ? undefined : val), z.string().url({ message: "Please enter a valid URL." }).optional()),
+    imageUrl3: z.preprocess((val) => (val === "" ? undefined : val), z.string().url({ message: "Please enter a valid URL." }).optional()),
+    imageUrl4: z.preprocess((val) => (val === "" ? undefined : val), z.string().url({ message: "Please enter a valid URL." }).optional()),
     videoUrl: z.preprocess(
         (val) => (val === "" ? undefined : val),
         z.string().url({ message: "Please enter a valid URL." }).optional()
     ),
     category: z.enum(['models', 'collections', 'products']),
-    mediaType: z.enum(['image', 'video']),
     itemType: z.string().min(1, { message: "Item type is required." }),
     season: z.enum(['Spring/Summer', 'Fall/Winter', 'All-Season']),
     inventoryStatus: z.enum(['available', 'sold out']),
@@ -93,9 +97,11 @@ export function GalleryManager() {
         defaultValues: {
             name: '',
             url: '',
+            imageUrl2: '',
+            imageUrl3: '',
+            imageUrl4: '',
             videoUrl: '',
             category: 'models',
-            mediaType: 'image',
             itemType: '',
             season: 'All-Season',
             inventoryStatus: 'available',
@@ -144,9 +150,11 @@ export function GalleryManager() {
         setEditingItem(item);
         setValue('name', item.name);
         setValue('url', item.url);
+        setValue('imageUrl2', item.imageUrl2 || '');
+        setValue('imageUrl3', item.imageUrl3 || '');
+        setValue('imageUrl4', item.imageUrl4 || '');
         setValue('videoUrl', item.videoUrl || '');
         setValue('category', item.category);
-        setValue('mediaType', item.mediaType);
         setValue('itemType', item.itemType);
         setValue('season', item.season);
         setValue('inventoryStatus', item.inventoryStatus);
@@ -198,20 +206,56 @@ export function GalleryManager() {
                                     )}
                                 />
                             </div>
-                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                             <div className="space-y-4 rounded-md border p-4">
+                                <h4 className="font-medium text-center">Media URLs</h4>
                                 <FormField
                                     control={form.control}
                                     name="url"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>{t.url}</FormLabel>
+                                            <FormLabel>Main Image URL</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="https://example.com/image.webp" {...field} />
+                                                <Input placeholder="https://example.com/main-image.webp" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="imageUrl2"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Image URL 2 <span className="text-xs text-muted-foreground">(Optional)</span></FormLabel>
+                                                <FormControl><Input {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="imageUrl3"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Image URL 3 <span className="text-xs text-muted-foreground">(Optional)</span></FormLabel>
+                                                <FormControl><Input {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="imageUrl4"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Image URL 4 <span className="text-xs text-muted-foreground">(Optional)</span></FormLabel>
+                                                <FormControl><Input {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
                                 <FormField
                                     control={form.control}
                                     name="videoUrl"
@@ -225,7 +269,7 @@ export function GalleryManager() {
                                         </FormItem>
                                     )}
                                 />
-                            </div>
+                             </div>
                              <FormField
                                 control={form.control}
                                 name="description"
@@ -239,7 +283,7 @@ export function GalleryManager() {
                                     </FormItem>
                                 )}
                             />
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <FormField
                                     control={form.control}
                                     name="category"
@@ -256,27 +300,6 @@ export function GalleryManager() {
                                                     <SelectItem value="models">{t.models}</SelectItem>
                                                     <SelectItem value="collections">{t.collections}</SelectItem>
                                                     <SelectItem value="products">{t.products}</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="mediaType"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>{t.type}</FormLabel>
-                                            <Select onValueChange={field.onChange} value={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Select a type" />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    <SelectItem value="image">{t.image}</SelectItem>
-                                                    <SelectItem value="video">{t.video}</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage />
@@ -370,28 +393,17 @@ export function GalleryManager() {
                     {!loading && galleryItems && (
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                             {galleryItems.map((item) => {
-                                const isInvalidImage = item.mediaType === 'image' && (item.url.includes('youtube.com') || item.url.includes('youtu.be'));
-                                
                                 return (
                                     <Card key={item.id} className="group relative overflow-hidden">
                                         <div className="relative aspect-[3/4]">
-                                            {isInvalidImage ? (
-                                                <div className="w-full h-full bg-secondary text-secondary-foreground flex flex-col items-center justify-center p-2 text-center">
-                                                    <p className="font-bold text-destructive">Invalid URL</p>
-                                                    <p className="text-xs mt-1">A video link was used for an 'Image' type. Please use a direct image URL.</p>
-                                                </div>
-                                            ) : item.mediaType === 'image' ? (
-                                                <Image src={item.url} alt={item.name} fill className="object-cover"/>
-                                            ) : (
-                                                <video src={item.url} className="w-full h-full object-cover" muted loop playsInline />
-                                            )}
+                                            <Image src={item.url} alt={item.name} fill className="object-cover"/>
                                             {item.inventoryStatus === 'sold out' && (
                                                 <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded-md">{t.soldOut.toUpperCase()}</div>
                                             )}
                                         </div>
                                         <div className="p-2 text-sm">
                                             <p className="font-semibold truncate">{item.name}</p>
-                                            <p className="text-xs text-muted-foreground">{item.category} / {item.mediaType}</p>
+                                            <p className="text-xs text-muted-foreground">{item.category}</p>
                                             <p className="text-xs text-muted-foreground">{item.itemType} - {item.season}</p>
                                             {item.category === 'products' && item.price && (
                                                 <p className="font-semibold text-sm pt-1">{item.price} TL</p>
