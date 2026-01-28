@@ -241,10 +241,10 @@ export function OurWork() {
                             if (isInvalidUrl) return null;
 
                             return (
-                                <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
+                                <Card key={work.id} className="overflow-hidden cursor-pointer group transition-shadow duration-300 ease-in-out hover:shadow-xl" onClick={() => setSelectedWork(work)}>
                                     <CardContent className="p-0">
-                                        <div className="relative aspect-[3/4]">
-                                            <Image src={thumbnailUrl} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
+                                        <div className="relative aspect-[3/4] overflow-hidden">
+                                            <Image src={thumbnailUrl} alt={work.name} fill className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105" data-ai-hint="fashion product" />
                                             {(work.videoUrl || mainUrlIsYoutube) && (
                                                 <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
                                             )}
@@ -253,11 +253,12 @@ export function OurWork() {
                                             )}
                                         </div>
                                     </CardContent>
-                                    {work.category === 'products' && work.price && (
-                                        <div className="p-2 border-t text-center">
-                                            <p className="font-bold text-foreground">{work.price} TL</p>
-                                        </div>
-                                    )}
+                                    <div className="p-3 border-t">
+                                        <p className="font-semibold truncate text-sm text-center">{work.name}</p>
+                                        {work.category === 'products' && work.price && (
+                                            <p className="text-sm font-bold text-primary text-center mt-1">{work.price} TL</p>
+                                        )}
+                                    </div>
                                 </Card>
                             );
                         })}
@@ -320,7 +321,7 @@ export function OurWork() {
                                     {selectedWork.description && (
                                         <div>
                                             <h4 className="font-semibold text-foreground mb-1">{t.imagePopup.descriptionHeader}</h4>
-                                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">{selectedWork.description}</p>
+                                            <p className="text-sm text-muted-foreground whitespace-pre-wrap break-words">{selectedWork.description}</p>
                                         </div>
                                     )}
                                 </div>
