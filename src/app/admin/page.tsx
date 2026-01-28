@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser, useAuth, useFirestore, useDoc } from '@/firebase';
 import { doc } from 'firebase/firestore';
+import { signOut } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { useLanguage } from '@/context/language-context';
@@ -31,21 +32,19 @@ export default function AdminPage() {
 
     const { data: userProfile, loading: profileLoading } = useDoc<UserProfile>(userProfileRef);
 
-    const isLoading = userLoading || profileLoading;
-
     useEffect(() => {
-        // Wait until all data is loaded
-        if (isLoading) {
+        // Don't make any decisions until all data is loaded.
+        if (userLoading || profileLoading) {
             return;
         }
 
-        // If not logged in, redirect to login page
+        // After loading, if there's no user, they should be at the login page.
         if (!user) {
             router.push('/login');
             return;
         }
 
-        // If logged in but not an admin, show error and redirect to home
+        // After loading, if the user is not an admin, show a toast and redirect to home.
         if (userProfile?.isAdmin !== true) {
             toast({
                 variant: 'destructive',
@@ -54,11 +53,19 @@ export default function AdminPage() {
             });
             router.push('/');
         }
-    }, [user, userProfile, isLoading, router, toast, t]);
+    }, [user, userProfile, userLoading, profileLoading, router, toast, t]);
 
-    // Show a spinner while loading or if user is not yet confirmed as an admin.
-    // This prevents any flash of admin content.
-    if (isLoading || !user || userProfile?.isAdmin !== true) {
+    const handleLogout = async () => {
+        if (auth) {
+            await signOut(auth);
+            router.push('/login');
+        }
+    };
+
+    // This is the gatekeeper for rendering.
+    // If we are loading, or if the final state is "not an admin", we show a spinner.
+    // This prevents any content from flashing. The useEffect will handle the redirect.
+    if (userLoading || profileLoading || !userProfile?.isAdmin) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-background">
                 <Spinner className="h-8 w-8" />
@@ -66,14 +73,7 @@ export default function AdminPage() {
         );
     }
 
-    const handleLogout = async () => {
-        if (auth) {
-            await auth.signOut();
-            router.push('/login');
-        }
-    };
-
-    // Only render the admin content if the user is authorized
+    // Only render the admin content if all checks pass.
     return (
         <div className="container mx-auto py-8">
             <header className="flex justify-between items-center mb-8">

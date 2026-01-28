@@ -39,18 +39,21 @@ export default function LoginPage() {
 
   const { data: userProfile, loading: profileLoading } = useDoc<UserProfile>(userProfileRef);
 
-  const isLoading = userLoading || profileLoading;
-
   useEffect(() => {
-    if (!isLoading && user) {
-        // User is already logged in, redirect them away from login page.
-        if (userProfile?.isAdmin) {
-             router.push('/admin');
-        } else {
-             router.push('/');
-        }
+    // Don't make any decisions until all data is loaded.
+    if (userLoading || profileLoading) {
+      return;
     }
-  }, [user, userProfile, isLoading, router]);
+
+    // After loading, if a user is logged in, redirect them.
+    if (user) {
+      if (userProfile?.isAdmin) {
+        router.push('/admin');
+      } else {
+        router.push('/');
+      }
+    }
+  }, [user, userProfile, userLoading, profileLoading, router]);
 
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -101,9 +104,9 @@ export default function LoginPage() {
     }
   };
 
-  // While checking auth status or if a user is already logged in, show a loader.
-  // This prevents the login form from flashing for logged-in users before they are redirected.
-  if (isLoading || user) {
+  // If we are checking the user's auth state, or if the user is already
+  // logged in (in which case the useEffect will redirect them), show a spinner.
+  if (userLoading || profileLoading || user) {
     return (
         <div className="flex items-center justify-center min-h-screen bg-secondary">
             <Spinner className="h-8 w-8" />
