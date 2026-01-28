@@ -6,6 +6,7 @@ import { LanguageProvider } from '@/context/language-context';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { WhatsAppButton } from '@/components/shared/whatsapp-button';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
   title: 'HUMAN NATURE',
@@ -34,15 +35,17 @@ export default function RootLayout({
          <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={cn('font-body antialiased')}>
-        <LanguageProvider>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </div>
-          <WhatsAppButton />
-          <Toaster />
-        </LanguageProvider>
+        <FirebaseClientProvider>
+          <LanguageProvider>
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="flex-grow">{children}</main>
+              <Footer />
+            </div>
+            <WhatsAppButton />
+            <Toaster />
+          </LanguageProvider>
+        </FirebaseClientProvider>
       </body>
     </html>
   );
