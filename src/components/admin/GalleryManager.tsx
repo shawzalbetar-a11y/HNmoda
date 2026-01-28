@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useCollection, useFirestore } from '@/firebase';
 import { addGalleryItem, updateGalleryItem, deleteGalleryItem } from '@/firebase/firestore/gallery';
-import { collection, query, orderBy } from 'firebase/firestore';
+import { collection, query, orderBy, Timestamp } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,6 +36,7 @@ import Image from 'next/image';
 import { useLanguage } from '@/context/language-context';
 import { translations } from '@/lib/translations';
 import { PlayCircle } from 'lucide-react';
+import { format } from 'date-fns';
 
 type GalleryItem = {
     id: string;
@@ -50,7 +51,7 @@ type GalleryItem = {
     season: 'Spring/Summer' | 'Fall/Winter' | 'All-Season';
     inventoryStatus: 'available' | 'sold out';
     description?: string;
-    createdAt: any;
+    createdAt: Timestamp;
     price?: number;
 };
 
@@ -462,6 +463,11 @@ export function GalleryManager() {
                                             <p className="font-semibold truncate">{item.name}</p>
                                             <p className="text-xs text-muted-foreground">{item.category}</p>
                                             <p className="text-xs text-muted-foreground">{item.itemType} - {item.season}</p>
+                                            {item.createdAt && (
+                                                <p className="text-xs text-muted-foreground italic">
+                                                    {format(item.createdAt.toDate(), 'dd/MM/yyyy')}
+                                                </p>
+                                            )}
                                             {item.category === 'products' && item.price && (
                                                 <p className="font-semibold text-sm pt-1">{item.price} TL</p>
                                             )}
