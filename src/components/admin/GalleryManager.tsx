@@ -35,6 +35,7 @@ import { Spinner } from '@/components/ui/spinner';
 import Image from 'next/image';
 import { useLanguage } from '@/context/language-context';
 import { translations } from '@/lib/translations';
+import { PlayCircle } from 'lucide-react';
 
 type GalleryItem = {
     id: string;
@@ -75,6 +76,37 @@ const formSchema = z.object({
 });
 
 type FormValues = z.infer<typeof formSchema>;
+
+const getYouTubeVideoId = (url: string): string | null => {
+    if (!url) return null;
+    let videoId: string | null = null;
+    try {
+        const urlObj = new URL(url);
+        if (urlObj.hostname.includes('youtube.com')) {
+            const videoIdParam = urlObj.searchParams.get('v');
+            if (urlObj.pathname.includes('/watch') && videoIdParam) {
+                videoId = videoIdParam;
+            } else if (urlObj.pathname.includes('/shorts/')) {
+                videoId = urlObj.pathname.split('/shorts/')[1].split('?')[0];
+            } else if (urlObj.pathname.includes('/embed/')) {
+                videoId = urlObj.pathname.split('/embed/')[1].split('?')[0];
+            }
+        } else if (urlObj.hostname.includes('youtu.be')) {
+            videoId = urlObj.pathname.substring(1).split('?')[0];
+        }
+    } catch (e) {
+        return null;
+    }
+    return videoId;
+};
+
+const getYouTubeThumbnailUrl = (url: string): string | null => {
+    const videoId = getYouTubeVideoId(url);
+    if (videoId) {
+        return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    }
+    return null;
+};
 
 
 export function GalleryManager() {
@@ -393,12 +425,37 @@ export function GalleryManager() {
                     {!loading && galleryItems && (
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                             {galleryItems.map((item) => {
+                                let displayUrl = item.url;
+                                let isInvalidUrl = false;
+                                
+                                const mainUrlIsYoutube = !!getYouTubeVideoId(item.url);
+                                if (mainUrlIsYoutube) {
+                                    displayUrl = getYouTubeThumbnailUrl(item.url) || item.url;
+                                }
+                        
+                                try {
+                                    new URL(displayUrl);
+                                } catch (error) {
+                                    isInvalidUrl = true;
+                                }
+
                                 return (
                                     <Card key={item.id} className="group relative overflow-hidden">
                                         <div className="relative aspect-[3/4]">
-                                            <Image src={item.url} alt={item.name} fill className="object-cover"/>
-                                            {item.inventoryStatus === 'sold out' && (
+                                            {isInvalidUrl ? (
+                                                <div className="flex h-full w-full items-center justify-center bg-destructive text-destructive-foreground p-2 text-center text-xs font-semibold">
+                                                    Invalid<br/>Image URL
+                                                </div>
+                                            ) : (
+                                                <Image src={displayUrl} alt={item.name} fill className="object-cover"/>
+                                            )}
+                                            
+                                            {item.inventoryStatus === 'sold out' && !isInvalidUrl && (
                                                 <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded-md">{t.soldOut.toUpperCase()}</div>
+                                            )}
+
+                                            {(item.videoUrl || mainUrlIsYoutube) && !isInvalidUrl && (
+                                                <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
                                             )}
                                         </div>
                                         <div className="p-2 text-sm">
