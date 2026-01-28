@@ -30,6 +30,10 @@
             "type": "string",
             "description": "Name of the gallery item."
         },
+        "description": {
+            "type": "string",
+            "description": "A detailed description of the gallery item."
+        },
         "url": {
           "type": "string",
           "format": "uri",

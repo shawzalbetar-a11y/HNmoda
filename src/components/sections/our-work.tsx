@@ -11,7 +11,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -24,14 +23,17 @@ import { collection, query, orderBy } from 'firebase/firestore';
 import { Spinner } from '@/components/ui/spinner';
 
 
-type WorkItem = { 
-    id: string, 
-    category: string, 
-    url: string, 
+type WorkItem = {
+    id: string,
+    category: string,
+    url: string,
     name: string,
     mediaType: 'image' | 'video',
     price?: number,
     inventoryStatus: 'available' | 'sold out',
+    itemType: string,
+    season: 'Spring/Summer' | 'Fall/Winter' | 'All-Season',
+    description?: string,
 };
 
 const getYouTubeVideoId = (url: string): string | null => {
@@ -77,6 +79,7 @@ const getYouTubeThumbnailUrl = (url: string): string | null => {
 export function OurWork() {
     const { language } = useLanguage();
     const t = translations[language].ourWork;
+    const tAdmin = translations[language].admin;
     const firestore = useFirestore();
 
     const galleryQuery = useMemo(() => {
@@ -105,8 +108,8 @@ export function OurWork() {
         note: '',
     });
 
-    const filteredWork = !allWork 
-        ? [] 
+    const filteredWork = !allWork
+        ? []
         : allWork.filter(work => {
             const isInvalidImage = work.mediaType === 'image' && (work.url.includes('youtube.com') || work.url.includes('youtu.be'));
             if (isInvalidImage) {
@@ -135,6 +138,18 @@ export function OurWork() {
         const whatsappUrl = `${siteWhatsappUrl}?text=${encodedMessage}`;
         window.open(whatsappUrl, '_blank');
         setIsOrderModalOpen(false);
+    };
+
+    const getTranslation = (key: string) => {
+        const keyMap: { [key: string]: keyof typeof tAdmin } = {
+            'Spring/Summer': 'springSummer',
+            'Fall/Winter': 'fallWinter',
+            'All-Season': 'allSeason',
+            'available': 'available',
+            'sold out': 'soldOut',
+        };
+        const mappedKey = keyMap[key];
+        return tAdmin[mappedKey] || key;
     };
 
 
@@ -213,7 +228,7 @@ export function OurWork() {
                                 {selectedWork.mediaType === 'image' ? (
                                     <Image src={selectedWork.url} alt={selectedWork.name} fill className="object-cover rounded-md" data-ai-hint="fashion product" />
                                 ) : embedUrl ? (
-                                    <iframe 
+                                    <iframe
                                         className="w-full h-full rounded-md"
                                         src={embedUrl}
                                         title={selectedWork.name}
@@ -225,19 +240,33 @@ export function OurWork() {
                                     <video src={selectedWork.url} className="w-full h-full object-cover rounded-md" controls autoPlay muted loop playsInline />
                                 )}
                             </div>
-                            <div>
-                                <DialogDescription>
-                                    <p className="mb-4">{t.imagePopup.description}</p>
+                            <div className="flex flex-col">
+                                <div className="space-y-4">
                                     {selectedWork.category === 'products' && selectedWork.price && (
-                                        <p className="text-2xl font-bold text-primary mb-4">{selectedWork.price} TL</p>
+                                        <p className="text-2xl font-bold text-primary">{selectedWork.price} TL</p>
                                     )}
-                                </DialogDescription>
-                                <Button 
-                                    onClick={() => { setIsOrderModalOpen(true); }}
-                                    disabled={selectedWork.inventoryStatus === 'sold out'}
-                                >
-                                    {selectedWork.inventoryStatus === 'sold out' ? t.soldOut : t.imagePopup.orderButton}
-                                </Button>
+
+                                    <div className="text-sm text-muted-foreground space-y-2">
+                                        <p><span className="font-semibold text-foreground">{t.imagePopup.itemType}:</span> {selectedWork.itemType}</p>
+                                        <p><span className="font-semibold text-foreground">{t.imagePopup.season}:</span> {getTranslation(selectedWork.season)}</p>
+                                        <p><span className="font-semibold text-foreground">{t.imagePopup.inventoryStatus}:</span> <span className={selectedWork.inventoryStatus === 'sold out' ? 'text-destructive font-bold' : 'text-green-600 font-bold'}>{getTranslation(selectedWork.inventoryStatus)}</span></p>
+                                    </div>
+
+                                    {selectedWork.description && (
+                                        <div>
+                                            <h4 className="font-semibold text-foreground mb-1">{t.imagePopup.descriptionHeader}</h4>
+                                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">{selectedWork.description}</p>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="mt-6">
+                                    <Button
+                                        onClick={() => { setIsOrderModalOpen(true); }}
+                                        disabled={selectedWork.inventoryStatus === 'sold out'}
+                                    >
+                                        {selectedWork.inventoryStatus === 'sold out' ? t.soldOut : t.imagePopup.orderButton}
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     </DialogContent>
@@ -248,7 +277,7 @@ export function OurWork() {
                 <DialogContent className="overflow-y-auto max-h-[90vh]">
                     <DialogHeader>
                         <DialogTitle>{t.orderForm.title}</DialogTitle>
-                        <DialogDescription>{t.orderForm.description}</DialogDescription>
+                        <p className="text-sm text-muted-foreground">{t.orderForm.description}</p>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">

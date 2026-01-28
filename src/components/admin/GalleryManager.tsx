@@ -9,6 +9,7 @@ import { collection, query, orderBy } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   Form,
@@ -45,6 +46,7 @@ type GalleryItem = {
     itemType: string;
     season: 'Spring/Summer' | 'Fall/Winter' | 'All-Season';
     inventoryStatus: 'available' | 'sold out';
+    description?: string;
     createdAt: any;
     price?: number;
 };
@@ -61,6 +63,7 @@ const formSchema = z.object({
     itemType: z.string().min(1, { message: "Item type is required." }),
     season: z.enum(['Spring/Summer', 'Fall/Winter', 'All-Season']),
     inventoryStatus: z.enum(['available', 'sold out']),
+    description: z.string().optional(),
     price: z.preprocess(
         (val) => (val === "" || val === null ? undefined : val),
         z.coerce.number({invalid_type_error: "Please enter a valid number."}).positive({ message: "Price must be positive." }).optional()
@@ -96,6 +99,7 @@ export function GalleryManager() {
             itemType: '',
             season: 'All-Season',
             inventoryStatus: 'available',
+            description: '',
             price: undefined,
         },
     });
@@ -108,15 +112,14 @@ export function GalleryManager() {
         
         const submissionData: any = { ...data };
 
-        // Firestore does not support 'undefined' values, which can be produced by our Zod schema
-        // for optional fields. We remove any properties with `undefined` values before submission.
-        if (submissionData.videoUrl === undefined) {
-            delete submissionData.videoUrl;
-        }
+        // Firestore does not support 'undefined' values. Clean up optional fields.
+        Object.keys(submissionData).forEach(key => {
+            if (submissionData[key] === undefined || submissionData[key] === '') {
+                delete submissionData[key];
+            }
+        });
         
         if (submissionData.category !== 'products') {
-            delete submissionData.price;
-        } else if (submissionData.price === undefined) {
             delete submissionData.price;
         }
 
@@ -147,6 +150,7 @@ export function GalleryManager() {
         setValue('itemType', item.itemType);
         setValue('season', item.season);
         setValue('inventoryStatus', item.inventoryStatus);
+        setValue('description', item.description || '');
         setValue('price', item.price);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -222,6 +226,19 @@ export function GalleryManager() {
                                     )}
                                 />
                             </div>
+                             <FormField
+                                control={form.control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t.description}</FormLabel>
+                                        <FormControl>
+                                            <Textarea placeholder="Detailed description of the item..." {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                 <FormField
                                     control={form.control}

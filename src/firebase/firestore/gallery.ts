@@ -21,6 +21,7 @@ type GalleryItemData = {
     itemType: string;
     season: 'Spring/Summer' | 'Fall/Winter' | 'All-Season';
     inventoryStatus: 'available' | 'sold out';
+    description?: string;
     price?: number;
 };
 

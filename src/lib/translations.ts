@@ -53,8 +53,11 @@ export const translations = {
             products: "Ürünler"
         },
         imagePopup: {
-            description: "Model hakkında daha fazla bilgi veya özel bir sipariş için bizimle iletişime geçin.",
-            orderButton: "Sipariş Ver"
+            orderButton: "Sipariş Ver",
+            descriptionHeader: "Açıklama",
+            itemType: "Ürün Tipi",
+            season: "Sezon",
+            inventoryStatus: "Stok Durumu",
         },
         orderForm: {
             title: "Sipariş Formu",
@@ -142,6 +145,7 @@ export const translations = {
         available: "Mevcut",
         soldOut: "Tükendi",
         videoUrl: "Video URL'si (Opsiyonel)",
+        description: "Açıklama",
     }
   },
   en: {
@@ -198,8 +202,11 @@ export const translations = {
             products: "Products"
         },
         imagePopup: {
-            description: "Contact us for more information about the model or for a special order.",
-            orderButton: "Order Now"
+            orderButton: "Order Now",
+            descriptionHeader: "Description",
+            itemType: "Item Type",
+            season: "Season",
+            inventoryStatus: "Inventory Status",
         },
         orderForm: {
             title: "Order Form",
@@ -287,6 +294,7 @@ export const translations = {
         available: "Available",
         soldOut: "Sold Out",
         videoUrl: "Video URL (Optional)",
+        description: "Description",
     }
   },
   ar: {
@@ -343,8 +351,11 @@ export const translations = {
             products: "المنتجات"
         },
         imagePopup: {
-            description: "اتصل بنا للحصول على مزيد من المعلومات حول الموديل أو لطلب خاص.",
-            orderButton: "اطلب الآن"
+            orderButton: "اطلب الآن",
+            descriptionHeader: "الوصف",
+            itemType: "نوع القطعة",
+            season: "الموسم",
+            inventoryStatus: "حالة المخزون",
         },
         orderForm: {
             title: "نموذج الطلب",
@@ -432,6 +443,7 @@ export const translations = {
         available: "متوفر",
         soldOut: "نفذت الكمية",
         videoUrl: "رابط الفيديو (اختياري)",
+        description: "الوصف",
     }
   },
 };
