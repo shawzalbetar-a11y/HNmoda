@@ -107,7 +107,16 @@ export function GalleryManager() {
         if (!firestore) return;
         
         const submissionData: any = { ...data };
+
+        // Firestore does not support 'undefined' values, which can be produced by our Zod schema
+        // for optional fields. We remove any properties with `undefined` values before submission.
+        if (submissionData.videoUrl === undefined) {
+            delete submissionData.videoUrl;
+        }
+        
         if (submissionData.category !== 'products') {
+            delete submissionData.price;
+        } else if (submissionData.price === undefined) {
             delete submissionData.price;
         }
 
