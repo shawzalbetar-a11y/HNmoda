@@ -194,7 +194,7 @@ export function GalleryManager() {
                                                 <FormControl>
                                                     <SelectTrigger>
                                                         <SelectValue placeholder="Select a type" />
-                                                    </Trigger>
+                                                    </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
                                                     <SelectItem value="image">{t.image}</SelectItem>
