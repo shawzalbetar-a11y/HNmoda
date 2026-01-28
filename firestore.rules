@@ -4,7 +4,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     // Allow public read access to gallery items for everyone
     match /gallery/{itemId} {
-      allow read: if true;
+      allow get, list: if true;
       // Allow create, update, delete only for authenticated users (admins)
       allow write: if request.auth != null;
     }
