@@ -69,7 +69,6 @@ export default function LoginPage() {
       // First, try to sign in.
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       await upsertUserProfile(firestore, userCredential.user);
-      router.push('/admin');
     } catch (error: any) {
         // If sign-in fails because the user doesn't exist or credentials are wrong,
         // try to create a new user account.
@@ -81,7 +80,6 @@ export default function LoginPage() {
                     title: t.accountCreatedTitle,
                     description: t.accountCreatedDescription,
                 });
-                router.push('/admin');
             } catch (creationError: any) {
                 // If account creation also fails (e.g., weak password), show that error.
                 toast({
