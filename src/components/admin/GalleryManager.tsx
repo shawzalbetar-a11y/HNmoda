@@ -42,6 +42,7 @@ type GalleryItem = {
     category: 'models' | 'collections' | 'products';
     name: string;
     createdAt: any;
+    price?: number;
 };
 
 const formSchema = z.object({
@@ -49,6 +50,10 @@ const formSchema = z.object({
     url: z.string().url({ message: "Please enter a valid URL." }),
     category: z.enum(['models', 'collections', 'products']),
     type: z.enum(['image', 'video']),
+    price: z.preprocess(
+        (val) => (val === "" || val === null ? undefined : val),
+        z.coerce.number({invalid_type_error: "Please enter a valid number."}).positive({ message: "Price must be positive." }).optional()
+    ),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -76,20 +81,27 @@ export function GalleryManager() {
             url: '',
             category: 'models',
             type: 'image',
+            price: undefined,
         },
     });
 
-    const { reset, setValue } = form;
+    const { reset, setValue, watch } = form;
+    const category = watch('category');
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
         if (!firestore) return;
         
+        const submissionData: any = { ...data };
+        if (submissionData.category !== 'products') {
+            delete submissionData.price;
+        }
+
         if (editingItem) {
-            updateGalleryItem(firestore, editingItem.id, data);
+            updateGalleryItem(firestore, editingItem.id, submissionData);
             toast({ title: t.itemUpdated });
             setEditingItem(null);
         } else {
-            addGalleryItem(firestore, data);
+            addGalleryItem(firestore, submissionData);
             toast({ title: t.itemAdded });
         }
         reset();
@@ -107,6 +119,7 @@ export function GalleryManager() {
         setValue('url', item.url);
         setValue('category', item.category);
         setValue('type', item.type);
+        setValue('price', item.price);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -196,6 +209,23 @@ export function GalleryManager() {
                                     )}
                                 />
                             </div>
+
+                            {category === 'products' && (
+                                <FormField
+                                    control={form.control}
+                                    name="price"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t.price || 'Price'}</FormLabel>
+                                            <FormControl>
+                                                <Input type="number" placeholder="19.99" {...field} value={field.value ?? ''} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            )}
+                            
                             <div className="flex items-center gap-4">
                                 <Button type="submit" disabled={form.formState.isSubmitting}>
                                     {form.formState.isSubmitting ? t.adding : (editingItem ? t.save : t.addItem)}
@@ -233,6 +263,9 @@ export function GalleryManager() {
                                     <div className="p-2 text-sm">
                                         <p className="font-semibold truncate">{item.name}</p>
                                         <p className="text-xs text-muted-foreground">{item.category} / {item.type}</p>
+                                        {item.category === 'products' && item.price && (
+                                            <p className="font-semibold text-sm pt-1">{item.price} TL</p>
+                                        )}
                                     </div>
                                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                                         <Button size="sm" onClick={() => handleEdit(item)}>{t.edit}</Button>

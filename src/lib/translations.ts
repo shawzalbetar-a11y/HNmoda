@@ -131,6 +131,7 @@ export const translations = {
         itemUpdated: "Öğe başarıyla güncellendi.",
         itemDeleted: "Öğe başarıyla silindi.",
         errorOccurred: "Bir hata oluştu.",
+        price: "Fiyat",
     }
   },
   en: {
@@ -265,6 +266,7 @@ export const translations = {
         itemUpdated: "Item updated successfully.",
         itemDeleted: "Item deleted successfully.",
         errorOccurred: "An error occurred.",
+        price: "Price",
     }
   },
   ar: {
@@ -399,6 +401,7 @@ export const translations = {
         itemUpdated: "تم تحديث العنصر بنجاح.",
         itemDeleted: "تم حذف العنصر بنجاح.",
         errorOccurred: "حدث خطأ ما.",
+        price: "السعر",
     }
   },
 };

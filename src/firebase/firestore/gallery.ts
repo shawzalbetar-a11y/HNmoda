@@ -17,6 +17,7 @@ type GalleryItemData = {
     url: string;
     category: 'models' | 'collections' | 'products';
     type: 'image' | 'video';
+    price?: number;
 };
 
 export const addGalleryItem = (firestore: Firestore, data: GalleryItemData) => {

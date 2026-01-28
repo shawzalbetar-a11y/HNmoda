@@ -45,6 +45,10 @@
             "type": "string",
             "description": "Name of the gallery item."
         },
+        "price": {
+            "type": "number",
+            "description": "Price of the product. Only applicable if category is 'products'."
+        },
         "createdAt": {
             "type": "string",
             "format": "date-time",

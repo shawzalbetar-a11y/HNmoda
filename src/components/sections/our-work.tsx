@@ -29,7 +29,8 @@ type WorkItem = {
     category: string, 
     url: string, 
     name: string,
-    type: 'image' | 'video' 
+    type: 'image' | 'video',
+    price?: number 
 };
 
 
@@ -126,6 +127,11 @@ export function OurWork() {
                                         )}
                                     </div>
                                 </CardContent>
+                                {work.category === 'products' && work.price && (
+                                    <div className="p-2 border-t text-center">
+                                        <p className="font-bold text-foreground">{work.price} TL</p>
+                                    </div>
+                                )}
                             </Card>
                         ))}
                     </div>
@@ -152,6 +158,9 @@ export function OurWork() {
                             <div>
                                 <DialogDescription>
                                     <p className="mb-4">{t.imagePopup.description}</p>
+                                    {selectedWork.category === 'products' && selectedWork.price && (
+                                        <p className="text-2xl font-bold text-primary mb-4">{selectedWork.price} TL</p>
+                                    )}
                                 </DialogDescription>
                                 <Button onClick={() => {
                                     setIsOrderModalOpen(true);
