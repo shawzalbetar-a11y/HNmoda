@@ -68,9 +68,16 @@ export function OurWork() {
 
     const filteredWork = !allWork 
         ? [] 
-        : activeFilter === 'all'
-            ? allWork
-            : allWork.filter(work => work.category === activeFilter);
+        : allWork.filter(work => {
+            const isInvalidImage = work.mediaType === 'image' && (work.url.includes('youtube.com') || work.url.includes('youtu.be'));
+            if (isInvalidImage) {
+                return false; // Exclude invalid items from public view
+            }
+            if (activeFilter === 'all') {
+                return true;
+            }
+            return work.category === activeFilter;
+        });
         
     const handleOrderSubmit = () => {
         const message = `
@@ -122,7 +129,11 @@ export function OurWork() {
                             <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
                                 <CardContent className="p-0">
                                     <div className="relative aspect-[3/4]">
-                                        <Image src={work.url} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
+                                        {work.mediaType === 'image' ? (
+                                            <Image src={work.url} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
+                                        ) : (
+                                            <video src={work.url} className="w-full h-full object-cover" muted loop playsInline />
+                                        )}
                                         {work.mediaType === 'video' && (
                                             <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
                                         )}

@@ -352,48 +352,57 @@ export function GalleryManager() {
                     )}
                     {!loading && galleryItems && (
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                            {galleryItems.map((item) => (
-                                <Card key={item.id} className="group relative overflow-hidden">
-                                    <div className="relative aspect-[3/4]">
-                                        {item.mediaType === 'image' ? (
-                                            <Image src={item.url} alt={item.name} fill className="object-cover"/>
-                                        ) : (
-                                            <video src={item.url} className="w-full h-full object-cover" muted loop playsInline />
-                                        )}
-                                        {item.inventoryStatus === 'sold out' && (
-                                            <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded-md">{t.soldOut.toUpperCase()}</div>
-                                        )}
-                                    </div>
-                                    <div className="p-2 text-sm">
-                                        <p className="font-semibold truncate">{item.name}</p>
-                                        <p className="text-xs text-muted-foreground">{item.category} / {item.mediaType}</p>
-                                        <p className="text-xs text-muted-foreground">{item.itemType} - {item.season}</p>
-                                        {item.category === 'products' && item.price && (
-                                            <p className="font-semibold text-sm pt-1">{item.price} TL</p>
-                                        )}
-                                    </div>
-                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                                        <Button size="sm" onClick={() => handleEdit(item)}>{t.edit}</Button>
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button size="sm" variant="destructive">{t.delete}</Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>{t.deleteConfirmTitle}</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        {t.deleteConfirmDescription}
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={() => handleDelete(item.id)}>{t.delete}</AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    </div>
-                                </Card>
-                            ))}
+                            {galleryItems.map((item) => {
+                                const isInvalidImage = item.mediaType === 'image' && (item.url.includes('youtube.com') || item.url.includes('youtu.be'));
+                                
+                                return (
+                                    <Card key={item.id} className="group relative overflow-hidden">
+                                        <div className="relative aspect-[3/4]">
+                                            {isInvalidImage ? (
+                                                <div className="w-full h-full bg-secondary text-secondary-foreground flex flex-col items-center justify-center p-2 text-center">
+                                                    <p className="font-bold text-destructive">Invalid URL</p>
+                                                    <p className="text-xs mt-1">A video link was used for an 'Image' type. Please use a direct image URL.</p>
+                                                </div>
+                                            ) : item.mediaType === 'image' ? (
+                                                <Image src={item.url} alt={item.name} fill className="object-cover"/>
+                                            ) : (
+                                                <video src={item.url} className="w-full h-full object-cover" muted loop playsInline />
+                                            )}
+                                            {item.inventoryStatus === 'sold out' && (
+                                                <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded-md">{t.soldOut.toUpperCase()}</div>
+                                            )}
+                                        </div>
+                                        <div className="p-2 text-sm">
+                                            <p className="font-semibold truncate">{item.name}</p>
+                                            <p className="text-xs text-muted-foreground">{item.category} / {item.mediaType}</p>
+                                            <p className="text-xs text-muted-foreground">{item.itemType} - {item.season}</p>
+                                            {item.category === 'products' && item.price && (
+                                                <p className="font-semibold text-sm pt-1">{item.price} TL</p>
+                                            )}
+                                        </div>
+                                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                            <Button size="sm" onClick={() => handleEdit(item)}>{t.edit}</Button>
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button size="sm" variant="destructive">{t.delete}</Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>{t.deleteConfirmTitle}</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            {t.deleteConfirmDescription}
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
+                                                        <AlertDialogAction onClick={() => handleDelete(item.id)}>{t.delete}</AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </div>
+                                    </Card>
+                                );
+                            })}
                         </div>
                     )}
                 </CardContent>
