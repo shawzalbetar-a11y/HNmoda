@@ -50,7 +50,9 @@ export const translations = {
             all: "Tümü",
             models: "Modeller",
             collections: "Koleksiyonlar",
-            products: "Ürünler"
+            products: "Ürünler",
+            category: "Kategori",
+            season: "Sezon",
         },
         imagePopup: {
             orderButton: "Sipariş Ver",
@@ -199,7 +201,9 @@ export const translations = {
             all: "All",
             models: "Models",
             collections: "Collections",
-            products: "Products"
+            products: "Products",
+            category: "Category",
+            season: "Season",
         },
         imagePopup: {
             orderButton: "Order Now",
@@ -348,7 +352,9 @@ export const translations = {
             all: "الكل",
             models: "الموديلات",
             collections: "المجموعات",
-            products: "المنتجات"
+            products: "المنتجات",
+            category: "الفئة",
+            season: "الموسم",
         },
         imagePopup: {
             orderButton: "اطلب الآن",

@@ -106,8 +106,16 @@ export function OurWork() {
         { key: 'collections', label: t.filters.collections },
         { key: 'products', label: t.filters.products },
     ];
+
+    const seasonFilters = [
+        { key: 'all', label: t.filters.all },
+        { key: 'Spring/Summer', label: tAdmin.springSummer },
+        { key: 'Fall/Winter', label: tAdmin.fallWinter },
+        { key: 'All-Season', label: tAdmin.allSeason },
+    ];
     
     const [activeFilter, setActiveFilter] = useState('all');
+    const [activeSeasonFilter, setActiveSeasonFilter] = useState('all');
     const [selectedWork, setSelectedWork] = useState<WorkItem | null>(null);
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
@@ -122,10 +130,9 @@ export function OurWork() {
     const filteredWork = !allWork
         ? []
         : allWork.filter(work => {
-            if (activeFilter === 'all') {
-                return true;
-            }
-            return work.category === activeFilter;
+            const categoryMatch = activeFilter === 'all' || work.category === activeFilter;
+            const seasonMatch = activeSeasonFilter === 'all' || work.season === activeSeasonFilter;
+            return categoryMatch && seasonMatch;
         });
         
     const handleOrderSubmit = () => {
@@ -184,16 +191,33 @@ export function OurWork() {
                     <p className="mt-4 text-lg text-muted-foreground">{t.subtitle}</p>
                 </div>
                 
-                <div className="flex justify-center flex-wrap gap-2 mb-8">
-                    {filters.map(filter => (
-                        <Button
-                            key={filter.key}
-                            variant={activeFilter === filter.key ? 'default' : 'outline'}
-                            onClick={() => setActiveFilter(filter.key)}
-                        >
-                            {filter.label}
-                        </Button>
-                    ))}
+                <div className="flex flex-col items-center gap-4 mb-8">
+                    <div className="flex items-center justify-center flex-wrap gap-2">
+                        <span className="text-sm font-medium text-muted-foreground mr-2">{t.filters.category}:</span>
+                        {filters.map(filter => (
+                            <Button
+                                key={filter.key}
+                                variant={activeFilter === filter.key ? 'default' : 'outline'}
+                                onClick={() => setActiveFilter(filter.key)}
+                                size="sm"
+                            >
+                                {filter.label}
+                            </Button>
+                        ))}
+                    </div>
+                    <div className="flex items-center justify-center flex-wrap gap-2">
+                        <span className="text-sm font-medium text-muted-foreground mr-2">{t.filters.season}:</span>
+                        {seasonFilters.map(filter => (
+                            <Button
+                                key={filter.key}
+                                variant={activeSeasonFilter === filter.key ? 'default' : 'outline'}
+                                onClick={() => setActiveSeasonFilter(filter.key)}
+                                size="sm"
+                            >
+                                {filter.label}
+                            </Button>
+                        ))}
+                    </div>
                 </div>
 
                 {loading && (
