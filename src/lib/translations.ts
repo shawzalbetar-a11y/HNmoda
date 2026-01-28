@@ -60,6 +60,7 @@ export const translations = {
             itemType: "Ürün Tipi",
             season: "Sezon",
             inventoryStatus: "Stok Durumu",
+            productCode: "Ürün Kodu",
         },
         orderForm: {
             title: "Sipariş Formu",
@@ -152,7 +153,8 @@ export const translations = {
         accessDeniedTitle: "Yetkisiz Erişim",
         accessDeniedDescription: "Yönetim paneline erişim izniniz yok.",
         accountCreatedTitle: "Hesap Oluşturuldu",
-        accountCreatedDescription: "Hesabınız başarıyla oluşturuldu. Yönlendiriliyorsunuz."
+        accountCreatedDescription: "Hesabınız başarıyla oluşturuldu. Yönlendiriliyorsunuz.",
+        productCode: "Ürün Kodu",
     }
   },
   en: {
@@ -216,6 +218,7 @@ export const translations = {
             itemType: "Item Type",
             season: "Season",
             inventoryStatus: "Inventory Status",
+            productCode: "Product Code",
         },
         orderForm: {
             title: "Order Form",
@@ -308,7 +311,8 @@ export const translations = {
         accessDeniedTitle: "Access Denied",
         accessDeniedDescription: "You do not have permission to access the admin panel.",
         accountCreatedTitle: "Account Created",
-        accountCreatedDescription: "Your account has been created. You will be redirected."
+        accountCreatedDescription: "Your account has been created. You will be redirected.",
+        productCode: "Product Code",
     }
   },
   ar: {
@@ -372,6 +376,7 @@ export const translations = {
             itemType: "نوع القطعة",
             season: "الموسم",
             inventoryStatus: "حالة المخزون",
+            productCode: "كود المنتج",
         },
         orderForm: {
             title: "نموذج الطلب",
@@ -464,7 +469,8 @@ export const translations = {
         accessDeniedTitle: "الوصول مرفوض",
         accessDeniedDescription: "ليس لديك إذن للوصول إلى لوحة الإدارة.",
         accountCreatedTitle: "تم إنشاء الحساب",
-        accountCreatedDescription: "تم إنشاء حسابك بنجاح. سيتم توجيهك الآن."
+        accountCreatedDescription: "تم إنشاء حسابك بنجاح. سيتم توجيهك الآن.",
+        productCode: "كود المنتج",
     }
   },
 };

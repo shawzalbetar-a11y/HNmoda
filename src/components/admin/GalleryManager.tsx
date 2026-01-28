@@ -40,6 +40,7 @@ import { format } from 'date-fns';
 
 type GalleryItem = {
     id: string;
+    productCode?: string;
     url: string;
     imageUrl2?: string;
     imageUrl3?: string;
@@ -56,6 +57,7 @@ type GalleryItem = {
 };
 
 const formSchema = z.object({
+    productCode: z.string().optional(),
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
     url: z.string().url({ message: "Please enter a valid URL." }),
     imageUrl2: z.preprocess((val) => (val === "" ? undefined : val), z.string().url({ message: "Please enter a valid URL." }).optional()),
@@ -128,6 +130,7 @@ export function GalleryManager() {
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+            productCode: '',
             name: '',
             url: '',
             imageUrl2: '',
@@ -181,6 +184,7 @@ export function GalleryManager() {
     
     const handleEdit = (item: GalleryItem) => {
         setEditingItem(item);
+        setValue('productCode', item.productCode || '');
         setValue('name', item.name);
         setValue('url', item.url);
         setValue('imageUrl2', item.imageUrl2 || '');
@@ -212,6 +216,19 @@ export function GalleryManager() {
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <FormField
+                                    control={form.control}
+                                    name="productCode"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>{t.productCode}</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="e.g. 0001" {...field} value={field.value ?? ''} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                                 <FormField
                                     control={form.control}
                                     name="name"
@@ -462,6 +479,7 @@ export function GalleryManager() {
                                         </div>
                                         <div className="p-2 text-sm">
                                             <p className="font-semibold truncate">{item.name}</p>
+                                            {item.productCode && <p className="text-xs font-mono text-muted-foreground">{item.productCode}</p>}
                                             <p className="text-xs text-muted-foreground">{item.category}</p>
                                             <p className="text-xs text-muted-foreground">{item.itemType} - {item.season}</p>
                                             {item.createdAt && (

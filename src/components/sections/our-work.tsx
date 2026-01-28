@@ -33,6 +33,7 @@ import { cn } from '@/lib/utils';
 
 type WorkItem = {
     id: string;
+    productCode?: string;
     category: string;
     url: string;
     imageUrl2?: string;
@@ -140,6 +141,7 @@ export function OurWork() {
             ${t.orderForm.whatsappMessageHeader}
             -----------------------------
             ${t.orderForm.product}: ${selectedWork?.name}
+            ${t.imagePopup.productCode}: ${selectedWork?.productCode || 'N/A'}
             ${t.orderForm.name}: ${formState.name} ${formState.surname}
             ${t.orderForm.phone}: ${formState.phone}
             ${t.orderForm.size}: ${formState.size}
@@ -256,6 +258,7 @@ export function OurWork() {
                                     </CardContent>
                                     <div className="p-3 border-t">
                                         <p className="font-semibold truncate text-sm text-center">{work.name}</p>
+                                        {work.productCode && <p className="text-xs font-mono text-center text-muted-foreground">{work.productCode}</p>}
                                         {work.category === 'products' && work.price && (
                                             <p className="text-sm font-bold text-primary text-center mt-1">{work.price} TL</p>
                                         )}
@@ -314,6 +317,7 @@ export function OurWork() {
                                     )}
 
                                     <div className="text-sm text-muted-foreground space-y-2">
+                                        {selectedWork.productCode && <p><span className="font-semibold text-foreground">{t.imagePopup.productCode}:</span> {selectedWork.productCode}</p>}
                                         <p><span className="font-semibold text-foreground">{t.imagePopup.itemType}:</span> {selectedWork.itemType}</p>
                                         <p><span className="font-semibold text-foreground">{t.imagePopup.season}:</span> {getTranslation(selectedWork.season)}</p>
                                         <p><span className="font-semibold text-foreground">{t.imagePopup.inventoryStatus}:</span> <span className={cn('font-bold', {

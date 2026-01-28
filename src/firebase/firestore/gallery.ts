@@ -13,6 +13,7 @@ import { errorEmitter } from '../error-emitter';
 import { FirestorePermissionError } from '../errors';
 
 type GalleryItemData = {
+    productCode?: string;
     name: string;
     url: string;
     imageUrl2?: string;

@@ -26,6 +26,10 @@
       "description": "An item in the gallery, which can include multiple images and a video.",
       "type": "object",
       "properties": {
+        "productCode": {
+            "type": "string",
+            "description": "A unique sequential code for the product, e.g., '0001'."
+        },
         "name": {
             "type": "string",
             "description": "Name of the gallery item."
