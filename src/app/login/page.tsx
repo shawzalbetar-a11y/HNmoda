@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { useAuth, useFirestore, useUser, useDoc } from '@/firebase';
+import { useAuth, useFirestore, useUser } from '@/firebase';
 import { upsertUserProfile } from '@/firebase/firestore/users';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,11 +13,6 @@ import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
 import { translations } from '@/lib/translations';
 import { Spinner } from '@/components/ui/spinner';
-import { doc } from 'firebase/firestore';
-
-type UserProfile = {
-    isAdmin?: boolean;
-};
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -32,25 +27,12 @@ export default function LoginPage() {
 
   const { user, loading: userLoading } = useUser();
 
-  const userProfileRef = useMemo(() => {
-    if (!firestore || !user) return null;
-    return doc(firestore, 'users', user.uid);
-  }, [firestore, user]);
-
-  const { data: userProfile, loading: profileLoading } = useDoc<UserProfile>(userProfileRef);
-
   useEffect(() => {
-    const isDataLoaded = !userLoading && !profileLoading;
-
-    // Only redirect if all data is loaded and a user is logged in.
-    if (isDataLoaded && user) {
-        if (userProfile?.isAdmin) {
-            router.push('/admin');
-        } else {
-            router.push('/');
-        }
+    // If we're done loading the user and they exist, redirect them away.
+    if (!userLoading && user) {
+        router.push('/admin');
     }
-  }, [user, userProfile, userLoading, profileLoading, router]);
+  }, [user, userLoading, router]);
 
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -69,14 +51,14 @@ export default function LoginPage() {
     try {
       // Try to sign in first.
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      // Ensure the profile exists after sign-in. The useEffect will handle redirection.
+      // Ensure the profile exists after sign-in.
       await upsertUserProfile(firestore, userCredential.user);
     } catch (error: any) {
         // If sign-in fails because the user doesn't exist, create a new account.
         if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') {
             try {
                 const newUserCredential = await createUserWithEmailAndPassword(auth, email, password);
-                // After creation, upsert the user profile. The useEffect will handle redirection.
+                // After creation, upsert the user profile.
                 await upsertUserProfile(firestore, newUserCredential.user);
                 toast({
                     title: t.accountCreatedTitle,
@@ -103,12 +85,10 @@ export default function LoginPage() {
     }
   };
 
-  const isLoading = userLoading || profileLoading;
-
   // If we are still checking the user's auth state, or if a user is already
   // logged in (in which case the useEffect will redirect them), show a spinner.
   // This prevents the login form from flashing for a logged-in user.
-  if (isLoading || user) {
+  if (userLoading || user) {
     return (
         <div className="flex items-center justify-center min-h-screen bg-secondary">
             <Spinner className="h-8 w-8" />
