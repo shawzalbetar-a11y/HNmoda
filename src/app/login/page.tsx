@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useAuth, useFirestore, useUser, useDoc } from '@/firebase';
 import { upsertUserProfile } from '@/firebase/firestore/users';
 import { Button } from '@/components/ui/button';
@@ -66,18 +66,38 @@ export default function LoginPage() {
         return;
     };
     try {
+      // First, try to sign in.
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      
-      // Ensure user profile is created/updated before redirecting
       await upsertUserProfile(firestore, userCredential.user);
-
       router.push('/admin');
     } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: t.loginErrorTitle,
-        description: error.message,
-      });
+        // If sign-in fails because the user doesn't exist or credentials are wrong,
+        // try to create a new user account.
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') {
+            try {
+                const newUserCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await upsertUserProfile(firestore, newUserCredential.user);
+                toast({
+                    title: t.accountCreatedTitle,
+                    description: t.accountCreatedDescription,
+                });
+                router.push('/admin');
+            } catch (creationError: any) {
+                // If account creation also fails (e.g., weak password), show that error.
+                toast({
+                    variant: 'destructive',
+                    title: t.loginErrorTitle,
+                    description: creationError.message,
+                });
+            }
+        } else {
+            // For any other sign-in errors (e.g., network issue), show the original error.
+            toast({
+                variant: 'destructive',
+                title: t.loginErrorTitle,
+                description: error.message,
+            });
+        }
     } finally {
         setIsSubmitting(false);
     }

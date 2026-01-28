@@ -150,6 +150,8 @@ export const translations = {
         description: "Açıklama",
         accessDeniedTitle: "Yetkisiz Erişim",
         accessDeniedDescription: "Yönetim paneline erişim izniniz yok.",
+        accountCreatedTitle: "Hesap Oluşturuldu",
+        accountCreatedDescription: "Hesabınız başarıyla oluşturuldu. Yönlendiriliyorsunuz."
     }
   },
   en: {
@@ -303,6 +305,8 @@ export const translations = {
         description: "Description",
         accessDeniedTitle: "Access Denied",
         accessDeniedDescription: "You do not have permission to access the admin panel.",
+        accountCreatedTitle: "Account Created",
+        accountCreatedDescription: "Your account has been created. You will be redirected."
     }
   },
   ar: {
@@ -456,6 +460,8 @@ export const translations = {
         description: "الوصف",
         accessDeniedTitle: "الوصول مرفوض",
         accessDeniedDescription: "ليس لديك إذن للوصول إلى لوحة الإدارة.",
+        accountCreatedTitle: "تم إنشاء الحساب",
+        accountCreatedDescription: "تم إنشاء حسابك بنجاح. سيتم توجيهك الآن."
     }
   },
 };
