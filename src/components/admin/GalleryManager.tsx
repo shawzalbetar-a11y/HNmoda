@@ -81,34 +81,24 @@ export function GalleryManager() {
 
     const { reset, setValue } = form;
 
-    const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const onSubmit: SubmitHandler<FormValues> = (data) => {
         if (!firestore) return;
         
-        try {
-            if (editingItem) {
-                await updateGalleryItem(firestore, editingItem.id, data);
-                toast({ title: t.itemUpdated });
-                setEditingItem(null);
-            } else {
-                await addGalleryItem(firestore, data);
-                toast({ title: t.itemAdded });
-            }
-            reset();
-        } catch (error) {
-            toast({ variant: 'destructive', title: t.errorOccurred });
-            console.error(error);
+        if (editingItem) {
+            updateGalleryItem(firestore, editingItem.id, data);
+            toast({ title: t.itemUpdated });
+            setEditingItem(null);
+        } else {
+            addGalleryItem(firestore, data);
+            toast({ title: t.itemAdded });
         }
+        reset();
     };
     
-    const handleDelete = async (id: string) => {
+    const handleDelete = (id: string) => {
         if (!firestore) return;
-        try {
-            await deleteGalleryItem(firestore, id);
-            toast({ title: t.itemDeleted });
-        } catch (error) {
-            toast({ variant: 'destructive', title: t.errorOccurred });
-            console.error(error);
-        }
+        deleteGalleryItem(firestore, id);
+        toast({ title: t.itemDeleted });
     };
     
     const handleEdit = (item: GalleryItem) => {
