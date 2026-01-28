@@ -31,32 +31,36 @@ export default function AdminPage() {
 
     const { data: userProfile, loading: profileLoading } = useDoc<UserProfile>(userProfileRef);
 
-    const loading = userLoading || profileLoading;
+    const isLoading = userLoading || profileLoading;
 
     useEffect(() => {
-        if (!loading) {
-            if (!user) {
-                // Not logged in, redirect to login
-                router.push('/login');
-            } else if (userProfile?.isAdmin !== true) {
-                // Logged in, but not an admin, redirect to home
-                toast({
-                    variant: 'destructive',
-                    title: t.accessDeniedTitle,
-                    description: t.accessDeniedDescription,
-                });
-                router.push('/');
-            }
+        // Wait until all data is loaded
+        if (isLoading) {
+            return;
         }
-    }, [user, userProfile, loading, router, toast, t]);
 
-    // Prevent flashing of unauthorized content.
-    // We will only render the content if all loading is complete AND the user is an admin.
-    // In all other cases (loading, not logged in, not an admin), we show a spinner.
-    // The useEffect above will handle the actual redirection.
-    if (loading || !user || userProfile?.isAdmin !== true) {
+        // If not logged in, redirect to login page
+        if (!user) {
+            router.push('/login');
+            return;
+        }
+
+        // If logged in but not an admin, show error and redirect to home
+        if (userProfile?.isAdmin !== true) {
+            toast({
+                variant: 'destructive',
+                title: t.accessDeniedTitle,
+                description: t.accessDeniedDescription,
+            });
+            router.push('/');
+        }
+    }, [user, userProfile, isLoading, router, toast, t]);
+
+    // Show a spinner while loading or if user is not yet confirmed as an admin.
+    // This prevents any flash of admin content.
+    if (isLoading || !user || userProfile?.isAdmin !== true) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
+            <div className="flex items-center justify-center min-h-screen bg-background">
                 <Spinner className="h-8 w-8" />
             </div>
         );
@@ -69,12 +73,13 @@ export default function AdminPage() {
         }
     };
 
+    // Only render the admin content if the user is authorized
     return (
         <div className="container mx-auto py-8">
             <header className="flex justify-between items-center mb-8">
                 <div>
                     <h1 className="text-3xl font-bold">{t.adminPanel}</h1>
-                    <p className="text-muted-foreground">{t.welcome}, {user.email}</p>
+                    <p className="text-muted-foreground">{t.welcome}, {user?.email}</p>
                 </div>
                 <Button onClick={handleLogout} variant="outline">{t.logout}</Button>
             </header>

@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useAuth, useFirestore, useUser } from '@/firebase';
+import { useAuth, useFirestore, useUser, useDoc } from '@/firebase';
 import { upsertUserProfile } from '@/firebase/firestore/users';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,7 +13,11 @@ import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
 import { translations } from '@/lib/translations';
 import { Spinner } from '@/components/ui/spinner';
+import { doc } from 'firebase/firestore';
 
+type UserProfile = {
+    isAdmin?: boolean;
+};
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -28,26 +32,44 @@ export default function LoginPage() {
 
   const { user, loading: userLoading } = useUser();
 
+  const userProfileRef = useMemo(() => {
+    if (!firestore || !user) return null;
+    return doc(firestore, 'users', user.uid);
+  }, [firestore, user]);
+
+  const { data: userProfile, loading: profileLoading } = useDoc<UserProfile>(userProfileRef);
+
+  const isLoading = userLoading || profileLoading;
+
   useEffect(() => {
-    if (!userLoading && user) {
+    if (!isLoading && user) {
         // User is already logged in, redirect them away from login page.
-        // Redirect to admin, the admin page will handle non-admin redirection to home.
-        router.push('/admin');
+        if (userProfile?.isAdmin) {
+             router.push('/admin');
+        } else {
+             router.push('/');
+        }
     }
-  }, [user, userLoading, router]);
+  }, [user, userProfile, isLoading, router]);
 
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     if (!auth || !firestore) {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Firebase not initialized correctly.',
+        });
         setIsSubmitting(false);
         return;
     };
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       
-      upsertUserProfile(firestore, userCredential.user);
+      // Ensure user profile is created/updated before redirecting
+      await upsertUserProfile(firestore, userCredential.user);
 
       router.push('/admin');
     } catch (error: any) {
@@ -61,9 +83,9 @@ export default function LoginPage() {
     }
   };
 
-  // While checking auth status or if user is already logged in, show a loader.
-  // This prevents the login form from flashing for logged-in users before redirecting.
-  if (userLoading || user) {
+  // While checking auth status or if a user is already logged in, show a loader.
+  // This prevents the login form from flashing for logged-in users before they are redirected.
+  if (isLoading || user) {
     return (
         <div className="flex items-center justify-center min-h-screen bg-secondary">
             <Spinner className="h-8 w-8" />
