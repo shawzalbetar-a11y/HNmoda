@@ -23,31 +23,50 @@
     },
     "galleryItem": {
       "title": "Gallery Item",
-      "description": "An image or video in the gallery.",
+      "description": "An image or video in the gallery, representing a model, collection, or product.",
       "type": "object",
       "properties": {
+        "name": {
+            "type": "string",
+            "description": "Name of the gallery item."
+        },
         "url": {
           "type": "string",
           "format": "uri",
-          "description": "URL of the media (webp image or video)."
+          "description": "URL of the primary media (webp image)."
         },
-        "type": {
+        "mediaType": {
           "type": "string",
           "enum": ["image", "video"],
-          "description": "Type of the media."
+          "description": "Type of the primary media."
+        },
+        "videoUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional URL for a promotional video (e.g., YouTube, Vimeo)."
         },
         "category": {
             "type": "string",
             "enum": ["models", "collections", "products"],
             "description": "The category of the work item."
         },
-        "name": {
+        "itemType": {
             "type": "string",
-            "description": "Name of the gallery item."
+            "description": "The type of clothing, e.g., 'Dress', 'Shirt', 'Trousers'."
+        },
+        "season": {
+            "type": "string",
+            "enum": ["Spring/Summer", "Fall/Winter", "All-Season"],
+            "description": "The fashion season this item belongs to."
+        },
+        "inventoryStatus": {
+            "type": "string",
+            "enum": ["available", "sold out"],
+            "description": "The availability status of the product."
         },
         "price": {
             "type": "number",
-            "description": "Price of the product. Only applicable if category is 'products'."
+            "description": "Price of the product. Should only be set if category is 'products'."
         },
         "createdAt": {
             "type": "string",
@@ -55,7 +74,20 @@
             "description": "Timestamp of creation."
         }
       },
-      "required": ["url", "type", "category", "name", "createdAt"]
+      "required": ["url", "mediaType", "category", "name", "createdAt", "inventoryStatus", "itemType", "season"]
+    },
+    "siteConfig": {
+        "title": "Site Configuration",
+        "description": "Stores global site configuration data like contact info.",
+        "type": "object",
+        "properties": {
+            "whatsappNumber": {"type": "string"},
+            "phone": {"type": "string"},
+            "email": {"type": "string", "format": "email"},
+            "telegram": {"type": "string"},
+            "address": {"type": "string"}
+        },
+        "required": ["whatsappNumber", "phone", "email", "address"]
     }
   },
   "auth": {
@@ -73,6 +105,12 @@
             "$ref": "#/entities/galleryItem"
         },
         "description": "Stores all gallery items, including images and videos."
+    },
+    "/configs/contact": {
+        "schema": {
+            "$ref": "#/entities/siteConfig"
+        },
+        "description": "Stores contact information that can be managed from the admin panel."
     }
   }
 }
