@@ -34,6 +34,36 @@ type WorkItem = {
     inventoryStatus: 'available' | 'sold out',
 };
 
+const getYouTubeEmbedUrl = (url: string): string | null => {
+    if (!url) return null;
+    let videoId = '';
+    try {
+        const urlObj = new URL(url);
+        if (urlObj.hostname.includes('youtube.com')) {
+            const videoIdParam = urlObj.searchParams.get('v');
+            if (urlObj.pathname.includes('/watch') && videoIdParam) {
+                videoId = videoIdParam;
+            } else if (urlObj.pathname.includes('/shorts/')) {
+                videoId = urlObj.pathname.split('/shorts/')[1].split('?')[0];
+            } else if (urlObj.pathname.includes('/embed/')) {
+                videoId = urlObj.pathname.split('/embed/')[1].split('?')[0];
+            }
+        } else if (urlObj.hostname.includes('youtu.be')) {
+            videoId = urlObj.pathname.substring(1).split('?')[0];
+        }
+    } catch (e) {
+        // Invalid URL, likely a direct video link
+        return null;
+    }
+
+    if (videoId) {
+        // Add autoplay and mute for a better experience
+        return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+    }
+
+    return null;
+};
+
 
 export function OurWork() {
     const { language } = useLanguage();
@@ -78,6 +108,8 @@ export function OurWork() {
             }
             return work.category === activeFilter;
         });
+
+    const embedUrl = selectedWork ? getYouTubeEmbedUrl(selectedWork.url) : null;
         
     const handleOrderSubmit = () => {
         const message = `
@@ -166,6 +198,15 @@ export function OurWork() {
                             <div className="relative aspect-[3/4]">
                                 {selectedWork.mediaType === 'image' ? (
                                     <Image src={selectedWork.url} alt={selectedWork.name} fill className="object-cover rounded-md" data-ai-hint="fashion product" />
+                                ) : embedUrl ? (
+                                    <iframe 
+                                        className="w-full h-full rounded-md"
+                                        src={embedUrl}
+                                        title={selectedWork.name}
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
                                 ) : (
                                     <video src={selectedWork.url} className="w-full h-full object-cover rounded-md" controls autoPlay muted loop playsInline />
                                 )}
