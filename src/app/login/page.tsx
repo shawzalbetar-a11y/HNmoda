@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useAuth, useFirestore } from '@/firebase';
+import { useAuth, useFirestore, useUser } from '@/firebase';
 import { upsertUserProfile } from '@/firebase/firestore/users';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,31 +12,41 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
 import { translations } from '@/lib/translations';
+import { Spinner } from '@/components/ui/spinner';
 
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const auth = useAuth();
-  const firestore = useFirestore(); // Get firestore instance
+  const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
   const { language } = useLanguage();
   const t = translations[language].admin;
 
+  const { user, loading: userLoading } = useUser();
+
+  useEffect(() => {
+    if (!userLoading && user) {
+        // User is already logged in, redirect them away from login page.
+        // Redirect to admin, the admin page will handle non-admin redirection to home.
+        router.push('/admin');
+    }
+  }, [user, userLoading, router]);
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setIsSubmitting(true);
     if (!auth || !firestore) {
-        setLoading(false);
+        setIsSubmitting(false);
         return;
     };
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       
-      // On successful login, create/update the user's profile document.
       upsertUserProfile(firestore, userCredential.user);
 
       router.push('/admin');
@@ -47,9 +57,19 @@ export default function LoginPage() {
         description: error.message,
       });
     } finally {
-        setLoading(false);
+        setIsSubmitting(false);
     }
   };
+
+  // While checking auth status or if user is already logged in, show a loader.
+  // This prevents the login form from flashing for logged-in users before redirecting.
+  if (userLoading || user) {
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-secondary">
+            <Spinner className="h-8 w-8" />
+        </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-secondary">
@@ -81,8 +101,8 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? t.loggingIn : t.login}
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? t.loggingIn : t.login}
             </Button>
           </form>
         </CardContent>

@@ -50,17 +50,16 @@ export default function AdminPage() {
         }
     }, [user, userProfile, loading, router, toast, t]);
 
-    if (loading) {
+    // Prevent flashing of unauthorized content.
+    // We will only render the content if all loading is complete AND the user is an admin.
+    // In all other cases (loading, not logged in, not an admin), we show a spinner.
+    // The useEffect above will handle the actual redirection.
+    if (loading || !user || userProfile?.isAdmin !== true) {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <Spinner className="h-8 w-8" />
             </div>
         );
-    }
-
-    if (!user || userProfile?.isAdmin !== true) {
-        // This is a fallback to prevent rendering the page before redirect completes
-        return null;
     }
 
     const handleLogout = async () => {
