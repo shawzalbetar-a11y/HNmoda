@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useLanguage } from '@/context/language-context';
 import { translations } from '@/lib/translations';
 import { Button } from '@/components/ui/button';
@@ -19,23 +19,31 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { whatsappUrl as siteWhatsappUrl } from '@/lib/config';
 import { PlayCircle } from 'lucide-react';
+import { useCollection, useFirestore } from '@/firebase';
+import { collection, query, orderBy } from 'firebase/firestore';
+import { Spinner } from '@/components/ui/spinner';
 
-const allWork = [
-    // Placeholder data
-    { id: 1, category: 'models', season: 'all', type: 'all', src: `https://picsum.photos/seed/a/600/800`, name: 'Elegant Dress' },
-    { id: 2, category: 'collections', season: 'all', type: 'all', src: `https://picsum.photos/seed/b/600/800`, name: 'Summer Collection' },
-    { id: 3, category: 'products', season: 'all', type: 'all', src: `https://picsum.photos/seed/c/600/800`, name: 'Casual Shirt' },
-    { id: 4, category: 'models', season: 'all', type: 'all', src: `https://picsum.photos/seed/d/600/800`, name: 'Formal Suit' },
-    { id: 5, category: 'collections', season: 'all', type: 'all', src: `https://picsum.photos/seed/e/600/800`, name: 'Winter Wear' },
-    { id: 6, category: 'products', season: 'all', type: 'all', src: `https://picsum.photos/seed/f/600/800`, name: 'Denim Jeans' },
-];
 
-type WorkItem = typeof allWork[0];
+type WorkItem = { 
+    id: string, 
+    category: string, 
+    url: string, 
+    name: string,
+    type: 'image' | 'video' 
+};
 
 
 export function OurWork() {
     const { language } = useLanguage();
     const t = translations[language].ourWork;
+    const firestore = useFirestore();
+
+    const galleryQuery = useMemo(() => {
+        if (!firestore) return null;
+        return query(collection(firestore, 'gallery'), orderBy('createdAt', 'desc'));
+    }, [firestore]);
+
+    const { data: allWork, loading } = useCollection<WorkItem>(galleryQuery);
 
     const filters = [
         { key: 'all', label: t.filters.all },
@@ -56,9 +64,11 @@ export function OurWork() {
         note: '',
     });
 
-    const filteredWork = activeFilter === 'all'
-        ? allWork
-        : allWork.filter(work => work.category === activeFilter);
+    const filteredWork = !allWork 
+        ? [] 
+        : activeFilter === 'all'
+            ? allWork
+            : allWork.filter(work => work.category === activeFilter);
         
     const handleOrderSubmit = () => {
         const message = `
@@ -98,18 +108,31 @@ export function OurWork() {
                     ))}
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {filteredWork.map(work => (
-                        <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
-                            <CardContent className="p-0">
-                                <div className="relative aspect-[3/4]">
-                                    <Image src={work.src} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
-                                    <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
+                {loading && (
+                    <div className="flex justify-center py-8">
+                        <Spinner className="h-8 w-8" />
+                    </div>
+                )}
+
+                {!loading && filteredWork && filteredWork.length > 0 && (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {filteredWork.map(work => (
+                            <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
+                                <CardContent className="p-0">
+                                    <div className="relative aspect-[3/4]">
+                                        <Image src={work.url} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
+                                        {work.type === 'video' && (
+                                            <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                )}
+                 {!loading && (!filteredWork || filteredWork.length === 0) && (
+                    <p className="text-center text-muted-foreground">No items to display in this category.</p>
+                )}
             </div>
 
             {selectedWork && (
@@ -120,17 +143,18 @@ export function OurWork() {
                         </DialogHeader>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4">
                             <div className="relative aspect-[3/4]">
-                                <Image src={selectedWork.src} alt={selectedWork.name} fill className="object-cover rounded-md" data-ai-hint="fashion product" />
+                                {selectedWork.type === 'image' ? (
+                                    <Image src={selectedWork.url} alt={selectedWork.name} fill className="object-cover rounded-md" data-ai-hint="fashion product" />
+                                ) : (
+                                    <video src={selectedWork.url} className="w-full h-full object-cover rounded-md" controls autoPlay muted loop playsInline />
+                                )}
                             </div>
                             <div>
                                 <DialogDescription>
                                     <p className="mb-4">{t.imagePopup.description}</p>
-                                    {/* More details can be added here */}
                                 </DialogDescription>
                                 <Button onClick={() => {
-                                    setSelectedWork(null);
-                                    setTimeout(() => setIsOrderModalOpen(true), 150);
-                                    setSelectedWork(selectedWork);
+                                    setIsOrderModalOpen(true);
                                 }}>{t.imagePopup.orderButton}</Button>
                             </div>
                         </div>
