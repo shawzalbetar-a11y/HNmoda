@@ -28,7 +28,7 @@ export default function LoginPage() {
   const { user, loading: userLoading } = useUser();
 
   useEffect(() => {
-    // If we're done loading the user and they exist, redirect them away.
+    // If we're done loading and the user exists, they shouldn't be on the login page.
     if (!userLoading && user) {
         router.push('/admin');
     }
@@ -49,23 +49,18 @@ export default function LoginPage() {
     };
 
     try {
-      // Try to sign in first.
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      // Ensure the profile exists after sign-in.
       await upsertUserProfile(firestore, userCredential.user);
     } catch (error: any) {
-        // If sign-in fails because the user doesn't exist, create a new account.
         if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') {
             try {
                 const newUserCredential = await createUserWithEmailAndPassword(auth, email, password);
-                // After creation, upsert the user profile.
                 await upsertUserProfile(firestore, newUserCredential.user);
                 toast({
                     title: t.accountCreatedTitle,
                     description: t.accountCreatedDescription,
                 });
             } catch (creationError: any) {
-                // If account creation also fails (e.g., weak password), show that error.
                 toast({
                     variant: 'destructive',
                     title: t.loginErrorTitle,
@@ -73,7 +68,6 @@ export default function LoginPage() {
                 });
             }
         } else {
-            // For any other sign-in errors (e.g., network issue), show the original error.
             toast({
                 variant: 'destructive',
                 title: t.loginErrorTitle,
@@ -85,9 +79,6 @@ export default function LoginPage() {
     }
   };
 
-  // If we are still checking the user's auth state, or if a user is already
-  // logged in (in which case the useEffect will redirect them), show a spinner.
-  // This prevents the login form from flashing for a logged-in user.
   if (userLoading || user) {
     return (
         <div className="flex items-center justify-center min-h-screen bg-secondary">
@@ -96,7 +87,6 @@ export default function LoginPage() {
     );
   }
 
-  // Only show the login form if loading is complete and there is no user.
   return (
     <div className="flex items-center justify-center min-h-screen bg-secondary">
       <Card className="w-full max-w-sm">

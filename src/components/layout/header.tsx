@@ -24,14 +24,52 @@ export function Header() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isSpecialOrderModalOpen, setIsSpecialOrderModalOpen] = useState(false);
 
-  const navLinks = [
-    { href: '/', label: t.home },
-    { href: '/#what-we-do', label: t.categories },
-    { href: '/#our-work', label: t.gallery },
-    { href: '/contact', label: t.contact },
-    { href: '/about', label: t.about },
-    { href: '/special-order', label: t.specialOrder, isButton: true },
+  const navItems = [
+    { type: 'link', href: '/', label: t.home },
+    { type: 'link', href: '/#what-we-do', label: t.categories },
+    { type: 'link', href: '/#our-work', label: t.gallery },
+    { type: 'modal', label: t.contact, action: () => setIsContactModalOpen(true) },
+    { type: 'modal', label: t.about, action: () => setIsAboutModalOpen(true) },
+    { type: 'button', label: t.specialOrder, action: () => setIsSpecialOrderModalOpen(true) },
   ];
+
+  const renderNavItem = (item: (typeof navItems)[0], isMobile = false) => {
+    const mobileProps = isMobile ? { onClick: () => setIsMobileMenuOpen(false) } : {};
+    const mobileModalProps = isMobile ? { onClick: () => { item.action(); setIsMobileMenuOpen(false); } } : { onClick: item.action };
+    
+    switch (item.type) {
+      case 'link':
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={isMobile ? "text-lg font-medium text-foreground hover:text-primary transition-colors" : "text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"}
+            {...mobileProps}
+          >
+            {item.label}
+          </Link>
+        );
+      case 'modal':
+        return (
+          <button
+            key={item.label}
+            className={isMobile ? "text-lg font-medium text-foreground hover:text-primary transition-colors" : "text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"}
+            {...mobileModalProps}
+          >
+            {item.label}
+          </button>
+        );
+      case 'button':
+        return (
+          <Button key={item.label} onClick={mobileModalProps.onClick} variant="default" size={isMobile ? undefined : "sm"} className={isMobile ? 'w-4/5' : ''}>
+            {item.label}
+          </Button>
+        );
+      default:
+        return null;
+    }
+  };
+
 
   return (
     <header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50">
@@ -49,46 +87,7 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">
-          {navLinks.map((link) => {
-             if (link.href === '/about') {
-              return (
-                <button
-                  key={link.href}
-                  onClick={() => setIsAboutModalOpen(true)}
-                  className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-                >
-                  {link.label}
-                </button>
-              );
-            }
-            if (link.href === '/contact') {
-              return (
-                <button
-                  key={link.href}
-                  onClick={() => setIsContactModalOpen(true)}
-                  className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-                >
-                  {link.label}
-                </button>
-              );
-            }
-            if (link.isButton) {
-              return (
-                <Button key={link.href} onClick={() => setIsSpecialOrderModalOpen(true)} variant="default" size="sm">
-                  {link.label}
-                </Button>
-              )
-            }
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-              >
-                {link.label}
-              </Link>
-            )
-          })}
+          {navItems.map((item) => renderNavItem(item))}
         </nav>
 
         <div className="flex items-center space-x-4">
@@ -123,53 +122,7 @@ export function Header() {
           )}
         >
           <nav className="flex flex-col items-center space-y-4 py-8">
-            {navLinks.map((link) => {
-              if (link.href === '/about') {
-                return (
-                   <button
-                    key={link.href}
-                    onClick={() => {
-                      setIsAboutModalOpen(true);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
-                  >
-                    {link.label}
-                  </button>
-                )
-              }
-              if (link.href === '/contact') {
-                return (
-                   <button
-                    key={link.href}
-                    onClick={() => {
-                      setIsContactModalOpen(true);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
-                  >
-                    {link.label}
-                  </button>
-                )
-              }
-              if (link.isButton) {
-                return (
-                  <Button key={link.href} onClick={() => { setIsSpecialOrderModalOpen(true); setIsMobileMenuOpen(false); }} className="w-4/5">
-                    {link.label}
-                  </Button>
-                )
-              }
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-lg font-medium text-foreground hover:text-primary transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              )
-            })}
+            {navItems.map((item) => renderNavItem(item, true))}
           </nav>
         </div>
       )}
