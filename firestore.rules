@@ -2,16 +2,32 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public read access to gallery items for everyone
-    match /gallery/{itemId} {
-      allow get, list: if true;
-      // Allow create, update, delete only for authenticated users (admins)
-      allow write: if request.auth != null;
+
+    // Helper function to check if the user has admin privileges.
+    // It reads the `isAdmin` flag from the user's profile document.
+    function isAdmin() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
 
-    // Allow users to manage their own profile data
+    // Gallery items are publicly readable.
+    // Only authenticated admins can create, update, or delete gallery items.
+    match /gallery/{itemId} {
+      allow get, list: if true;
+      allow write: if request.auth != null && isAdmin();
+    }
+
+    // Users can read and write their own profile data.
+    // Admins are allowed to read any user's profile.
     match /users/{userId} {
        allow read, write: if request.auth != null && request.auth.uid == userId;
+       allow get: if request.auth != null && isAdmin();
+    }
+
+    // Contact configuration is publicly readable.
+    // Only admins can modify the contact configuration.
+    match /configs/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null && isAdmin();
     }
   }
 }

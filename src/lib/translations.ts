@@ -148,6 +148,8 @@ export const translations = {
         soldOut: "Tükendi",
         videoUrl: "Video URL'si (Opsiyonel)",
         description: "Açıklama",
+        accessDeniedTitle: "Yetkisiz Erişim",
+        accessDeniedDescription: "Yönetim paneline erişim izniniz yok.",
     }
   },
   en: {
@@ -299,6 +301,8 @@ export const translations = {
         soldOut: "Sold Out",
         videoUrl: "Video URL (Optional)",
         description: "Description",
+        accessDeniedTitle: "Access Denied",
+        accessDeniedDescription: "You do not have permission to access the admin panel.",
     }
   },
   ar: {
@@ -450,6 +454,8 @@ export const translations = {
         soldOut: "نفذت الكمية",
         videoUrl: "رابط الفيديو (اختياري)",
         description: "الوصف",
+        accessDeniedTitle: "الوصول مرفوض",
+        accessDeniedDescription: "ليس لديك إذن للوصول إلى لوحة الإدارة.",
     }
   },
 };
