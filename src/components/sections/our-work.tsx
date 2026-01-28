@@ -160,7 +160,14 @@ export function OurWork() {
     const mediaForSelectedWork = useMemo(() => {
         if (!selectedWork) return [];
         const media = [];
-        if (selectedWork.url) media.push({ type: 'image', url: selectedWork.url });
+        if (selectedWork.url) {
+            const mainUrlIsYoutube = !!getYouTubeVideoId(selectedWork.url);
+            if (mainUrlIsYoutube) {
+                media.push({ type: 'video', url: selectedWork.url });
+            } else {
+                media.push({ type: 'image', url: selectedWork.url });
+            }
+        }
         if (selectedWork.imageUrl2) media.push({ type: 'image', url: selectedWork.imageUrl2 });
         if (selectedWork.imageUrl3) media.push({ type: 'image', url: selectedWork.imageUrl3 });
         if (selectedWork.imageUrl4) media.push({ type: 'image', url: selectedWork.imageUrl4 });
@@ -197,26 +204,39 @@ export function OurWork() {
 
                 {!loading && filteredWork && filteredWork.length > 0 && (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {filteredWork.map(work => (
-                            <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
-                                <CardContent className="p-0">
-                                    <div className="relative aspect-[3/4]">
-                                        <Image src={work.url} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
-                                        {work.videoUrl && (
-                                            <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
-                                        )}
-                                        {work.inventoryStatus === 'sold out' && (
-                                            <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded">{t.soldOut}</div>
-                                        )}
-                                    </div>
-                                </CardContent>
-                                {work.category === 'products' && work.price && (
-                                    <div className="p-2 border-t text-center">
-                                        <p className="font-bold text-foreground">{work.price} TL</p>
-                                    </div>
-                                )}
-                            </Card>
-                        ))}
+                        {filteredWork.map(work => {
+                            const mainUrlIsYoutube = !!getYouTubeVideoId(work.url);
+                            const thumbnailUrl = mainUrlIsYoutube ? getYouTubeThumbnailUrl(work.url) || work.url : work.url;
+
+                            let isInvalidUrl = false;
+                            try {
+                                new URL(thumbnailUrl);
+                            } catch (e) {
+                                isInvalidUrl = true;
+                            }
+                            if (isInvalidUrl) return null;
+
+                            return (
+                                <Card key={work.id} className="overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl" onClick={() => setSelectedWork(work)}>
+                                    <CardContent className="p-0">
+                                        <div className="relative aspect-[3/4]">
+                                            <Image src={thumbnailUrl} alt={work.name} fill className="object-cover" data-ai-hint="fashion product" />
+                                            {(work.videoUrl || mainUrlIsYoutube) && (
+                                                <PlayCircle className="absolute bottom-2 right-2 h-8 w-8 text-white bg-black/40 rounded-full p-1" />
+                                            )}
+                                            {work.inventoryStatus === 'sold out' && (
+                                                <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded">{t.soldOut}</div>
+                                            )}
+                                        </div>
+                                    </CardContent>
+                                    {work.category === 'products' && work.price && (
+                                        <div className="p-2 border-t text-center">
+                                            <p className="font-bold text-foreground">{work.price} TL</p>
+                                        </div>
+                                    )}
+                                </Card>
+                            );
+                        })}
                     </div>
                 )}
                  {!loading && (!filteredWork || filteredWork.length === 0) && (
