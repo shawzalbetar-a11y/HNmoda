@@ -49,7 +49,7 @@ type GalleryItem = {
     name: string;
     itemType: string;
     season: 'Spring/Summer' | 'Fall/Winter' | 'All-Season';
-    inventoryStatus: 'available' | 'sold out';
+    inventoryStatus: 'available' | 'sold out' | 'by request';
     description?: string;
     createdAt: Timestamp;
     price?: number;
@@ -68,7 +68,7 @@ const formSchema = z.object({
     category: z.enum(['models', 'collections', 'products']),
     itemType: z.string().min(1, { message: "Item type is required." }),
     season: z.enum(['Spring/Summer', 'Fall/Winter', 'All-Season']),
-    inventoryStatus: z.enum(['available', 'sold out']),
+    inventoryStatus: z.enum(['available', 'sold out', 'by request']),
     description: z.string().optional(),
     price: z.preprocess(
         (val) => (val === "" || val === null ? undefined : val),
@@ -376,6 +376,7 @@ export function GalleryManager() {
                                                 <SelectContent>
                                                     <SelectItem value="available">{t.available}</SelectItem>
                                                     <SelectItem value="sold out">{t.soldOut}</SelectItem>
+                                                    <SelectItem value="by request">{t.byRequest}</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage />

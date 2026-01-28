@@ -75,7 +75,7 @@
         },
         "inventoryStatus": {
             "type": "string",
-            "enum": ["available", "sold out"],
+            "enum": ["available", "sold out", "by request"],
             "description": "The availability status of the product."
         },
         "price": {

@@ -41,7 +41,7 @@ type WorkItem = {
     videoUrl?: string;
     name: string;
     price?: number;
-    inventoryStatus: 'available' | 'sold out';
+    inventoryStatus: 'available' | 'sold out' | 'by request';
     itemType: string;
     season: 'Spring/Summer' | 'Fall/Winter' | 'All-Season';
     description?: string;
@@ -159,6 +159,7 @@ export function OurWork() {
             'All-Season': 'allSeason',
             'available': 'available',
             'sold out': 'soldOut',
+            'by request': 'byRequest',
         };
         const mappedKey = keyMap[key];
         return tAdmin[mappedKey] || key;
@@ -315,7 +316,11 @@ export function OurWork() {
                                     <div className="text-sm text-muted-foreground space-y-2">
                                         <p><span className="font-semibold text-foreground">{t.imagePopup.itemType}:</span> {selectedWork.itemType}</p>
                                         <p><span className="font-semibold text-foreground">{t.imagePopup.season}:</span> {getTranslation(selectedWork.season)}</p>
-                                        <p><span className="font-semibold text-foreground">{t.imagePopup.inventoryStatus}:</span> <span className={selectedWork.inventoryStatus === 'sold out' ? 'text-destructive font-bold' : 'text-green-600 font-bold'}>{getTranslation(selectedWork.inventoryStatus)}</span></p>
+                                        <p><span className="font-semibold text-foreground">{t.imagePopup.inventoryStatus}:</span> <span className={cn('font-bold', {
+                                            'text-destructive': selectedWork.inventoryStatus === 'sold out',
+                                            'text-green-600': selectedWork.inventoryStatus === 'available',
+                                            'text-primary': selectedWork.inventoryStatus === 'by request',
+                                        })}>{getTranslation(selectedWork.inventoryStatus)}</span></p>
                                     </div>
 
                                     {selectedWork.description && (

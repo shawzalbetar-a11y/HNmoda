@@ -22,7 +22,7 @@ type GalleryItemData = {
     category: 'models' | 'collections' | 'products';
     itemType: string;
     season: 'Spring/Summer' | 'Fall/Winter' | 'All-Season';
-    inventoryStatus: 'available' | 'sold out';
+    inventoryStatus: 'available' | 'sold out' | 'by request';
     description?: string;
     price?: number;
 };
