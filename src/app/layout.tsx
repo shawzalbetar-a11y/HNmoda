@@ -10,12 +10,13 @@ import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
   title: 'HUMAN NATURE',
-  description: 'Discover the finest in fashion with HUMAN NATURE. Explore our collections of high-quality textiles and designs.',
+  description: 'HNmoda ile modanın en iyisini keşfedin. Yüksek kaliteli tekstil ve tasarım koleksiyonlarımızı inceleyin..',
   manifest: '/manifest.json',
   verification: 'fICrYb_DNgHsTS4l7dJfdZzrrQBJYetbUvVD5rA_vL8',
   };
 
  export const metadataseo = {
+  title: 'hnmoda'
   title: 'Human Nature - ملابس نسائية في إسطنبول',
   description: 'أفضل التصاميم النسائية من شركة HNmoda في تركيا',
   title: 'Human Nature - İstanbulda kadın giyim',
