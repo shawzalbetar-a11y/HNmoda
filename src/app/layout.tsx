@@ -12,9 +12,6 @@ export const metadata: Metadata = {
   title: 'HUMAN NATURE',
   description: 'Discover the finest in fashion with HUMAN NATURE. Explore our collections of high-quality textiles and designs.',
   manifest: '/manifest.json',
-};
-
-export const metadata = {
   verification: 
     google: "fICrYb_DNgHsTS4l7dJfdZzrrQBJYetbUvVD5rA_vL8",
   };
