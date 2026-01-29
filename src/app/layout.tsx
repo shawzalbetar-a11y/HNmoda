@@ -18,9 +18,6 @@ export const metadata: Metadata = {
  export const metadataseo = {
   title: 'Human Nature - ملابس نسائية في إسطنبول',
   description: 'أفضل التصاميم النسائية من شركة HNmoda في تركيا',
-  };
-
- export const metadata = {
   title: 'Human Nature - İstanbulda kadın giyim',
    description: 'HN Moda en iyi mankenlere sahip.',
   };
