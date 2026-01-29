@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   verification: 'fICrYb_DNgHsTS4l7dJfdZzrrQBJYetbUvVD5rA_vL8',
   };
 
- export const metadata = {
+ export const metadataseo = {
   title: 'Human Nature - ملابس نسائية في إسطنبول',
   description: 'أفضل التصاميم النسائية من شركة HNmoda في تركيا',
   };
