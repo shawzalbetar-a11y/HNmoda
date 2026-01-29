@@ -14,13 +14,15 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   verification: 'fICrYb_DNgHsTS4l7dJfdZzrrQBJYetbUvVD5rA_vL8',
   };
+
  export const metadata = {
   title: 'Human Nature - ملابس نسائية في إسطنبول',
   description: 'أفضل التصاميم النسائية من شركة HNmoda في تركيا',
   };
+
  export const metadata = {
   title: 'Human Nature - İstanbul'da kadın giyim',
-  description: 'HN Moda en iyi mankenlere sahip.',
+   description: 'HN Moda en iyi mankenlere sahip.',
   };
 
  export const viewport: Viewport = {
