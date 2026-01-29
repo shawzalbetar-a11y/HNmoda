@@ -14,6 +14,11 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
 };
 
+export const metadata = {
+  verification: {
+    google: "fICrYb_DNgHsTS4l7dJfdZzrrQBJYetbUvVD5rA_vL8",
+  },
+};
 export const viewport: Viewport = {
   themeColor: '#FFFFFF',
 };
