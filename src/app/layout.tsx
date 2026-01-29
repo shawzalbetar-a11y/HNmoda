@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   };
 
  export const metadata = {
-  title: 'Human Nature - İstanbul'da kadın giyim',
+  title: 'Human Nature - İstanbulda kadın giyim',
    description: 'HN Moda en iyi mankenlere sahip.',
   };
 
