@@ -15,10 +15,10 @@ export const metadata: Metadata = {
 };
 
 export const metadata = {
-  verification: {
+  verification: 
     google: "fICrYb_DNgHsTS4l7dJfdZzrrQBJYetbUvVD5rA_vL8",
-  },
-};
+  };
+
 export const viewport: Viewport = {
   themeColor: '#FFFFFF',
 };
