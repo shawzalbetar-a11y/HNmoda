@@ -3,7 +3,7 @@ export const siteConfig = {
         whatsappNumber: '905449996865',
         phone: '+90 544 999 68 65',
         email: 'info@hnmoda.tr',
-        telegram: '@HUMAN_NATURE_HN',
+        telegram: '@HN_MODA',
         address: 'Istanbul, Turkey',
     }
 }
