@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,11 +22,11 @@ import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, orderBy } from 'firebase/firestore';
 import { Spinner } from '@/components/ui/spinner';
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
 } from "@/components/ui/carousel"
 import { cn } from '@/lib/utils';
 
@@ -91,7 +91,6 @@ const getYouTubeThumbnailUrl = (url: string): string | null => {
 export function OurWork() {
     const { language } = useLanguage();
     const t = translations[language].ourWork;
-    const tAdmin = translations[language].admin;
     const firestore = useFirestore();
 
     const galleryQuery = useMemo(() => {
@@ -110,11 +109,11 @@ export function OurWork() {
 
     const seasonFilters = [
         { key: 'all', label: t.filters.all },
-        { key: 'Spring/Summer', label: tAdmin.springSummer },
-        { key: 'Fall/Winter', label: tAdmin.fallWinter },
-        { key: 'All-Season', label: tAdmin.allSeason },
+        { key: 'Spring/Summer', label: t.springSummer },
+        { key: 'Fall/Winter', label: t.fallWinter },
+        { key: 'All-Season', label: t.allSeason },
     ];
-    
+
     const [activeFilter, setActiveFilter] = useState('all');
     const [activeSeasonFilter, setActiveSeasonFilter] = useState('all');
     const [selectedWork, setSelectedWork] = useState<WorkItem | null>(null);
@@ -135,7 +134,7 @@ export function OurWork() {
             const seasonMatch = activeSeasonFilter === 'all' || work.season === activeSeasonFilter;
             return categoryMatch && seasonMatch;
         });
-        
+
     const handleOrderSubmit = () => {
         const message = `
             ${t.orderForm.whatsappMessageHeader}
@@ -155,7 +154,7 @@ export function OurWork() {
     };
 
     const getTranslation = (key: string) => {
-        const keyMap: { [key: string]: keyof typeof tAdmin } = {
+        const keyMap: { [key: string]: keyof typeof t } = {
             'Spring/Summer': 'springSummer',
             'Fall/Winter': 'fallWinter',
             'All-Season': 'allSeason',
@@ -164,7 +163,8 @@ export function OurWork() {
             'by request': 'byRequest',
         };
         const mappedKey = keyMap[key];
-        return tAdmin[mappedKey] || key;
+        // @ts-ignore
+        return t[mappedKey] || key;
     };
 
     const mediaForSelectedWork = useMemo(() => {
@@ -193,7 +193,7 @@ export function OurWork() {
                     <h2 className="text-3xl md:text-4xl font-bold font-display">{t.title}</h2>
                     <p className="mt-4 text-lg text-muted-foreground">{t.subtitle}</p>
                 </div>
-                
+
                 <div className="flex flex-col items-center gap-4 mb-8">
                     <div className="flex items-center justify-center flex-wrap gap-2">
                         <span className="text-sm font-medium text-muted-foreground mr-2">{t.filters.category}:</span>
@@ -268,86 +268,98 @@ export function OurWork() {
                         })}
                     </div>
                 )}
-                 {!loading && (!filteredWork || filteredWork.length === 0) && (
+                {!loading && (!filteredWork || filteredWork.length === 0) && (
                     <p className="text-center text-muted-foreground">No items to display in this category.</p>
                 )}
             </div>
 
             {selectedWork && (
                 <Dialog open={!!selectedWork} onOpenChange={(open) => !open && setSelectedWork(null)}>
-                    <DialogContent className="max-w-4xl">
-                        <DialogHeader>
-                            <DialogTitle>{selectedWork.name}</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4">
-                            <Carousel className="w-full">
-                                <CarouselContent>
-                                    {mediaForSelectedWork.map((media, index) => (
-                                        <CarouselItem key={index}>
-                                            <div className="relative aspect-[3/4]">
-                                                {media.type === 'image' ? (
-                                                    <Image src={media.url} alt={`${selectedWork.name} - ${index + 1}`} fill className="object-cover rounded-md" />
-                                                ) : getYouTubeEmbedUrl(media.url) ? (
-                                                    <iframe
-                                                        className="w-full h-full rounded-md"
-                                                        src={getYouTubeEmbedUrl(media.url)}
-                                                        title={selectedWork.name}
-                                                        frameBorder="0"
-                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                        allowFullScreen
-                                                    ></iframe>
-                                                ) : (
-                                                    <video src={media.url} className="w-full h-full object-cover rounded-md" controls autoPlay muted loop playsInline />
-                                                )}
-                                            </div>
-                                        </CarouselItem>
-                                    ))}
-                                </CarouselContent>
-                                {mediaForSelectedWork.length > 1 && (
-                                    <>
-                                        <CarouselPrevious className="left-2" />
-                                        <CarouselNext className="right-2" />
-                                    </>
-                                )}
-                            </Carousel>
-                            <div className="flex flex-col">
-                                <div className="space-y-4">
-                                    {selectedWork.category === 'products' && selectedWork.price && (
-                                        <p className="text-2xl font-bold text-primary">{selectedWork.price} TL</p>
-                                    )}
+                    <DialogContent className="max-w-4xl w-[95vw] h-[90vh] md:h-auto max-h-[95vh] p-0 flex flex-col gap-0 overflow-hidden">
+                        <div className="p-4 sm:p-6 border-b shrink-0 bg-background/95 backdrop-blur z-20 flex flex-col justify-center min-h-[60px]">
+                            <DialogHeader>
+                                <DialogTitle className="text-center">{selectedWork.name}</DialogTitle>
+                            </DialogHeader>
+                        </div>
 
-                                    <div className="text-sm text-muted-foreground space-y-2">
-                                        {selectedWork.productCode && <p><span className="font-semibold text-foreground">{t.imagePopup.productCode}:</span> {selectedWork.productCode}</p>}
-                                        <p><span className="font-semibold text-foreground">{t.imagePopup.itemType}:</span> {selectedWork.itemType}</p>
-                                        <p><span className="font-semibold text-foreground">{t.imagePopup.season}:</span> {getTranslation(selectedWork.season)}</p>
-                                        <p><span className="font-semibold text-foreground">{t.imagePopup.inventoryStatus}:</span> <span className={cn('font-bold', {
-                                            'text-destructive': selectedWork.inventoryStatus === 'sold out',
-                                            'text-green-600': selectedWork.inventoryStatus === 'available',
-                                            'text-primary': selectedWork.inventoryStatus === 'by request',
-                                        })}>{getTranslation(selectedWork.inventoryStatus)}</span></p>
+                        <div className="flex-1 overflow-y-auto p-4 sm:p-6 pb-20 md:pb-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                                <div className="w-full">
+                                    <Carousel className="w-full max-w-[400px] mx-auto md:max-w-full">
+                                        <CarouselContent>
+                                            {mediaForSelectedWork.map((media, index) => (
+                                                <CarouselItem key={index}>
+                                                    <div className="relative aspect-[3/4] w-full bg-muted rounded-md overflow-hidden">
+                                                        {media.type === 'image' ? (
+                                                            <Image src={media.url} alt={`${selectedWork.name} - ${index + 1}`} fill className="object-cover" />
+                                                        ) : getYouTubeEmbedUrl(media.url) ? (
+                                                            <iframe
+                                                                className="w-full h-full"
+                                                                src={getYouTubeEmbedUrl(media.url)}
+                                                                title={selectedWork.name}
+                                                                frameBorder="0"
+                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                allowFullScreen
+                                                            ></iframe>
+                                                        ) : (
+                                                            <video src={media.url} className="w-full h-full object-cover" controls autoPlay muted loop playsInline />
+                                                        )}
+                                                    </div>
+                                                </CarouselItem>
+                                            ))}
+                                        </CarouselContent>
+                                        {mediaForSelectedWork.length > 1 && (
+                                            <>
+                                                <CarouselPrevious className="left-2" />
+                                                <CarouselNext className="right-2" />
+                                            </>
+                                        )}
+                                    </Carousel>
+                                </div>
+
+                                <div className="flex flex-col space-y-6">
+                                    <div className="space-y-4">
+                                        <div className="flex items-baseline justify-between">
+                                            {selectedWork.category === 'products' && selectedWork.price && (
+                                                <p className="text-2xl font-bold text-primary">{selectedWork.price} TL</p>
+                                            )}
+                                        </div>
+
+                                        <div className="text-sm text-muted-foreground space-y-2 bg-muted/30 p-4 rounded-lg">
+                                            {selectedWork.productCode && <p className="flex justify-between"><span className="font-semibold text-foreground">{t.imagePopup.productCode}:</span> <span>{selectedWork.productCode}</span></p>}
+                                            <p className="flex justify-between"><span className="font-semibold text-foreground">{t.imagePopup.itemType}:</span> <span>{selectedWork.itemType}</span></p>
+                                            <p className="flex justify-between"><span className="font-semibold text-foreground">{t.imagePopup.season}:</span> <span>{getTranslation(selectedWork.season)}</span></p>
+                                            <p className="flex justify-between"><span className="font-semibold text-foreground">{t.imagePopup.inventoryStatus}:</span> <span className={cn('font-bold', {
+                                                'text-destructive': selectedWork.inventoryStatus === 'sold out',
+                                                'text-green-600': selectedWork.inventoryStatus === 'available',
+                                                'text-primary': selectedWork.inventoryStatus === 'by request',
+                                            })}>{getTranslation(selectedWork.inventoryStatus)}</span></p>
+                                        </div>
+
+                                        {selectedWork.description && (
+                                            <div>
+                                                <h4 className="font-semibold text-foreground mb-2">{t.imagePopup.descriptionHeader}</h4>
+                                                <p className="text-sm text-muted-foreground whitespace-pre-wrap break-words leading-relaxed">{selectedWork.description}</p>
+                                            </div>
+                                        )}
                                     </div>
 
-                                    {selectedWork.description && (
-                                        <div>
-                                            <h4 className="font-semibold text-foreground mb-1">{t.imagePopup.descriptionHeader}</h4>
-                                            <p className="text-sm text-muted-foreground whitespace-pre-wrap break-words">{selectedWork.description}</p>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="mt-6">
-                                    <Button
-                                        onClick={() => { setIsOrderModalOpen(true); }}
-                                        disabled={selectedWork.inventoryStatus === 'sold out'}
-                                    >
-                                        {selectedWork.inventoryStatus === 'sold out' ? t.soldOut : t.imagePopup.orderButton}
-                                    </Button>
+                                    <div className="sticky bottom-0 pt-4 bg-background/95 backdrop-blur md:static md:bg-transparent md:pt-0">
+                                        <Button
+                                            className="w-full md:w-auto h-12 text-lg shadow-md"
+                                            onClick={() => { setIsOrderModalOpen(true); }}
+                                            disabled={selectedWork.inventoryStatus === 'sold out'}
+                                        >
+                                            {selectedWork.inventoryStatus === 'sold out' ? t.soldOut : t.imagePopup.orderButton}
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </DialogContent>
                 </Dialog>
             )}
-            
+
             <Dialog open={isOrderModalOpen} onOpenChange={setIsOrderModalOpen}>
                 <DialogContent className="overflow-y-auto max-h-[90vh]">
                     <DialogHeader>
@@ -357,23 +369,23 @@ export function OurWork() {
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">{t.orderForm.name}</Label>
-                            <Input id="name" value={formState.name} onChange={e => setFormState({...formState, name: e.target.value})} className="col-span-3" />
+                            <Input id="name" value={formState.name} onChange={e => setFormState({ ...formState, name: e.target.value })} className="col-span-3" />
                         </div>
-                         <div className="grid grid-cols-4 items-center gap-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="surname" className="text-right">{t.orderForm.surname}</Label>
-                            <Input id="surname" value={formState.surname} onChange={e => setFormState({...formState, surname: e.target.value})} className="col-span-3" />
+                            <Input id="surname" value={formState.surname} onChange={e => setFormState({ ...formState, surname: e.target.value })} className="col-span-3" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="phone" className="text-right">{t.orderForm.phone}</Label>
-                            <Input id="phone" value={formState.phone} onChange={e => setFormState({...formState, phone: e.target.value})} className="col-span-3" />
+                            <Input id="phone" value={formState.phone} onChange={e => setFormState({ ...formState, phone: e.target.value })} className="col-span-3" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="size" className="text-right">{t.orderForm.size}</Label>
-                            <Input id="size" value={formState.size} onChange={e => setFormState({...formState, size: e.target.value})} className="col-span-3" />
+                            <Input id="size" value={formState.size} onChange={e => setFormState({ ...formState, size: e.target.value })} className="col-span-3" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="note" className="text-right">{t.orderForm.note}</Label>
-                            <Textarea id="note" value={formState.note} onChange={e => setFormState({...formState, note: e.target.value})} className="col-span-3" />
+                            <Textarea id="note" value={formState.note} onChange={e => setFormState({ ...formState, note: e.target.value })} className="col-span-3" />
                         </div>
                     </div>
                     <DialogFooter>

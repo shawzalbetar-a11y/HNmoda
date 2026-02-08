@@ -1,8 +1,8 @@
 export const firebaseConfig = {
-  apiKey: "AIzaSyCsLQ3NSgdPuL2BZIQp0g53mZAMQb9OvqU",
-  authDomain: "hn-moda.firebaseapp.com",
-  projectId: "hn-moda",
-  storageBucket: "hn-moda.appspot.com",
-  messagingSenderId: "26718268785",
-  appId: "1:26718268785:web:7206ba50f7dfb9a1879ad0"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };

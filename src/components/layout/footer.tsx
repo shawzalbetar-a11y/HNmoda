@@ -2,12 +2,13 @@
 
 import { useLanguage } from '@/context/language-context';
 import { translations } from '@/lib/translations';
-import { Copyright } from 'lucide-react';
+import { Copyright, Instagram, Facebook } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { AboutUsModal } from '@/components/sections/about-us';
 import { ContactUsModal } from '@/components/sections/contact-us-modal';
 import { siteConfig } from '@/lib/config';
+import { Icons } from '@/components/shared/icons';
 
 export function Footer() {
     const { language } = useLanguage();
@@ -36,6 +37,17 @@ export function Footer() {
                         <p>{t.footer.address}</p>
                         <p>{siteConfig.contact.address}</p>
                     </address>
+                    <div className="flex items-center space-x-4 mt-4">
+                        <a href={siteConfig.social.instagram} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                            <Instagram className="h-5 w-5" />
+                        </a>
+                        <a href={siteConfig.social.facebook} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                            <Facebook className="h-5 w-5" />
+                        </a>
+                        <a href={siteConfig.social.tiktok} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                            <Icons.tiktok className="h-4 w-4" />
+                        </a>
+                    </div>
                 </div>
             </div>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-8 border-t border-border pt-4 flex items-center justify-center text-xs text-muted-foreground">

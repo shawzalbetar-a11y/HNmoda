@@ -5,6 +5,11 @@ export const siteConfig = {
         email: 'info@hnmoda.tr',
         telegram: 'HUMAN_NATURE_HN',
         address: 'Istanbul, Turkey',
+    },
+    social: {
+        instagram: 'https://instagram.com',
+        facebook: 'https://facebook.com',
+        tiktok: 'https://tiktok.com',
     }
 }
 
