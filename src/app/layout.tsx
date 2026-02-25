@@ -25,10 +25,10 @@ const ptSans = PT_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: 'HUMAN NATURE | High Quality Women\'s Fashion in Istanbul',
+    default: 'HUMAN NATURE | İstanbulda Yüksek Kaliteli Modası',
     template: '%s | HUMAN NATURE'
   },
-  description: 'Discover the best of fashion with HNmoda. High-quality textile and design collections in Istanbul, Turkey. ملابس نسائية راقية في إسطنبول.',
+  description: 'HNmoda ile modanın en iyilerini keşfedin. İstanbul, Türkiyede yüksek kaliteli tekstil ve tasarım koleksiyonları.. ملابس راقية في إسطنبول.',
   keywords: ['fashion', 'istanbul', 'women clothing', 'textile', 'wholesale', 'hnmoda', 'human nature', 'ملابس نسائية', 'اسطنبول', 'تركيا', 'moda'],
   manifest: '/manifest.json',
   verification: {
@@ -38,14 +38,14 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://hnmoda.tr',
-    title: 'HUMAN NATURE | High Quality Women\'s Fashion',
+    title: 'HUMAN NATURE | İstanbulda Yüksek Kaliteli Modası',
     description: 'Explore our latest collections of high-quality women\'s fashion and textiles.',
     siteName: 'HUMAN NATURE',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'HUMAN NATURE | Fashion',
-    description: 'High Quality Women\'s Fashion in Istanbul.',
+    description: 'High Quality\'s Fashion in Istanbul.',
   },
 };
 
