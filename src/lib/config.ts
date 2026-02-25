@@ -7,9 +7,9 @@ export const siteConfig = {
         address: 'Istanbul, Turkey',
     },
     social: {
-        instagram: 'https://instagram.com',
-        facebook: 'https://facebook.com',
-        tiktok: 'https://tiktok.com',
+        instagram: 'https://www.instagram.com/hnmoda.tr',
+        facebook: 'https://www.facebook.com/share/1GsfhSph2D/',
+        tiktok: 'https://www.tiktok.com/@hn_moda',
     }
 }
 
